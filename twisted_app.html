@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TWISTED — Steampunk Companion</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brass:#C9A84C;--brass-light:#E8C97A;--brass-dark:#8B6914;
+  --copper:#B87333;--iron:#3A3A4A;--iron-dark:#1A1A28;
+  --rust:#8B3A2A;--rust-light:#C0503A;
+  --steam:#D4C5A9;--parchment:#F2E8D0;--parchment-dark:#D4C5A9;
+  --green:#3DB88C;--blue:#4A9ECC;--red:#CC4A4A;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--iron-dark);color:var(--steam);font-family:'IM Fell English',serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 20%,rgba(201,168,76,.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(184,115,51,.06) 0%,transparent 50%);pointer-events:none;z-index:0;}
+
+/* HEADER */
+header{background:linear-gradient(180deg,rgba(26,18,8,.98),rgba(26,26,40,.95));border-bottom:1px solid var(--brass-dark);padding:0 1.5rem;position:sticky;top:0;z-index:100;box-shadow:0 4px 30px rgba(0,0,0,.5);}
+.header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;padding:.6rem 0;flex-wrap:wrap;}
+.logo-twisted{font-family:'Cinzel Decorative',serif;font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,var(--brass-light),var(--brass),var(--copper));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.12em;filter:drop-shadow(0 0 8px rgba(201,168,76,.4));}
+.logo-sub{font-family:'Josefin Sans',sans-serif;font-size:.52rem;letter-spacing:.3em;color:var(--brass-dark);text-transform:uppercase;display:block;margin-top:2px;}
+nav{display:flex;gap:.2rem;flex-wrap:wrap;}
+.nav-btn{background:transparent;border:1px solid transparent;color:var(--parchment-dark);font-family:'Josefin Sans',sans-serif;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;padding:.4rem .7rem;cursor:pointer;border-radius:3px;transition:all .2s;white-space:nowrap;}
+.nav-btn:hover{color:var(--brass-light);border-color:rgba(201,168,76,.3);background:rgba(201,168,76,.06);}
+.nav-btn.active{color:var(--brass-light);border-color:var(--brass-dark);background:rgba(201,168,76,.1);}
+
+/* MAIN */
+main{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:2rem 1.5rem;}
+.panel{display:none;animation:fadeIn .35s ease;}
+.panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTION HEADER */
+.section-header{text-align:center;margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(201,168,76,.2);position:relative;}
+.section-header::after{content:'⚙';position:absolute;bottom:-.65rem;left:50%;transform:translateX(-50%);background:var(--iron-dark);padding:0 .5rem;color:var(--brass-dark);font-size:1.1rem;}
+.section-title{font-family:'Cinzel',serif;font-size:2rem;font-weight:700;background:linear-gradient(135deg,var(--brass-light),var(--brass));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.1em;margin-bottom:.4rem;}
+.section-subtitle{font-family:'Josefin Sans',sans-serif;font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;color:var(--brass-dark);}
+
+/* CARDS */
+.card{background:linear-gradient(135deg,rgba(42,38,30,.9),rgba(30,28,40,.9));border:1px solid rgba(201,168,76,.2);border-radius:6px;padding:1.25rem;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--brass-dark),transparent);}
+.card-title{font-family:'Cinzel',serif;font-size:.95rem;color:var(--brass-light);letter-spacing:.08em;margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem;}
+
+/* GRIDS */
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;}
+.grid-auto{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem;}
+
+/* WELCOME */
+.welcome-emblem{font-size:4.5rem;display:block;margin-bottom:.75rem;filter:drop-shadow(0 0 18px rgba(201,168,76,.5));animation:pulse 3s ease-in-out infinite;}
+@keyframes pulse{0%,100%{filter:drop-shadow(0 0 18px rgba(201,168,76,.5))}50%{filter:drop-shadow(0 0 32px rgba(201,168,76,.8))}}
+.welcome-title{font-family:'Cinzel Decorative',serif;font-size:clamp(2.2rem,5vw,4.5rem);font-weight:900;background:linear-gradient(135deg,#E8C97A 0%,#C9A84C 40%,#B87333 70%,#C9A84C 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.1em;line-height:1.1;filter:drop-shadow(0 0 15px rgba(201,168,76,.3));}
+.welcome-tagline{font-family:'Josefin Sans',sans-serif;font-size:.85rem;letter-spacing:.4em;text-transform:uppercase;color:var(--brass-dark);margin:.75rem 0 2rem;}
+.welcome-divider{width:180px;height:1px;background:linear-gradient(90deg,transparent,var(--brass-dark),transparent);margin:0 auto 2rem;}
+.welcome-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.9rem;max-width:900px;margin:0 auto 2.5rem;}
+.welcome-card{background:linear-gradient(135deg,rgba(42,38,30,.8),rgba(30,28,40,.8));border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:1.25rem .9rem;cursor:pointer;transition:all .3s;text-align:center;}
+.welcome-card:hover{border-color:var(--brass);transform:translateY(-3px);box-shadow:0 8px 28px rgba(201,168,76,.14);}
+.wc-icon{font-size:2.2rem;margin-bottom:.6rem;display:block;}
+.wc-title{font-family:'Cinzel',serif;font-size:.82rem;color:var(--brass-light);letter-spacing:.06em;margin-bottom:.3rem;}
+.wc-desc{font-family:'Josefin Sans',sans-serif;font-size:.67rem;color:var(--parchment-dark);opacity:.8;}
+
+/* RULES */
+.rules-layout{display:grid;grid-template-columns:220px 1fr;gap:1.75rem;align-items:start;}
+.rules-nav{background:rgba(26,26,40,.8);border:1px solid rgba(201,168,76,.15);border-radius:6px;padding:.9rem;position:sticky;top:76px;}
+.rules-nav-title{font-family:'Josefin Sans',sans-serif;font-size:.7rem;color:var(--brass-dark);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.6rem;padding-bottom:.4rem;border-bottom:1px solid rgba(201,168,76,.15);}
+.rules-nav-item{display:flex;align-items:center;gap:.4rem;width:100%;background:transparent;border:none;text-align:left;padding:.42rem .65rem;cursor:pointer;border-radius:4px;font-family:'Josefin Sans',sans-serif;font-size:.72rem;letter-spacing:.04em;color:var(--parchment-dark);transition:all .2s;margin-bottom:.05rem;}
+.rules-nav-item:hover{background:rgba(201,168,76,.08);color:var(--brass-light);}
+.rules-nav-item.active{background:rgba(201,168,76,.12);color:var(--brass-light);border-left:2px solid var(--brass);}
+.rules-page{display:none;}
+.rules-page.active{display:block;animation:fadeIn .25s ease;}
+.rule-block{background:linear-gradient(135deg,rgba(42,38,30,.7),rgba(30,28,40,.7));border:1px solid rgba(201,168,76,.15);border-radius:6px;padding:1.1rem 1.35rem;margin-bottom:.9rem;}
+.rule-block h3{font-family:'Cinzel',serif;font-size:.95rem;color:var(--brass-light);margin-bottom:.65rem;}
+.rule-block p,.rule-block li{font-size:.87rem;line-height:1.75;color:var(--steam);margin-bottom:.35rem;}
+.rule-block ul{padding-left:1.1rem;}
+.highlight-box{background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.28);border-radius:4px;padding:.65rem .9rem;margin:.65rem 0;font-size:.83rem;color:var(--parchment);}
+.highlight-box strong{color:var(--brass-light);}
+.example-box{background:rgba(61,184,140,.06);border-left:3px solid var(--green);padding:.65rem .9rem;margin:.65rem 0;font-size:.83rem;border-radius:0 4px 4px 0;font-style:italic;color:var(--parchment-dark);}
+.notice{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:.65rem .9rem;font-family:'Josefin Sans',sans-serif;font-size:.77rem;color:var(--parchment-dark);margin:.75rem 0;}
+.notice.warning{background:rgba(204,74,74,.06);border-color:rgba(204,74,74,.25);}
+.notice.tip{background:rgba(61,184,140,.06);border-color:rgba(61,184,140,.25);}
+.stat-pill{display:inline-block;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.28);color:var(--brass-light);font-family:'Josefin Sans',sans-serif;font-size:.68rem;letter-spacing:.08em;padding:.18rem .45rem;border-radius:3px;margin:.1rem;}
+.turn-sequence{display:flex;gap:0;margin:1.25rem 0;}
+.turn-step{flex:1;text-align:center;padding:.9rem .6rem;background:rgba(30,28,40,.8);border:1px solid rgba(201,168,76,.18);position:relative;}
+.turn-step:first-child{border-radius:6px 0 0 6px;}
+.turn-step:last-child{border-radius:0 6px 6px 0;}
+.turn-step::after{content:'▶';position:absolute;right:-.55rem;top:50%;transform:translateY(-50%);color:var(--brass-dark);font-size:.65rem;z-index:1;}
+.turn-step:last-child::after{display:none;}
+.ts-num{font-family:'Cinzel Decorative',serif;font-size:1.3rem;color:var(--brass-dark);display:block;}
+.ts-name{font-family:'Cinzel',serif;font-size:.72rem;color:var(--brass-light);display:block;margin:.2rem 0;}
+.ts-desc{font-family:'Josefin Sans',sans-serif;font-size:.62rem;color:var(--parchment-dark);opacity:.8;}
+
+/* CHARACTERS */
+.faction-tabs{display:flex;gap:.4rem;margin-bottom:1.75rem;flex-wrap:wrap;}
+.faction-tab{background:rgba(26,26,40,.8);border:1px solid rgba(201,168,76,.18);color:var(--parchment-dark);font-family:'Josefin Sans',sans-serif;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding:.42rem .9rem;border-radius:4px;cursor:pointer;transition:all .2s;}
+.faction-tab:hover{border-color:rgba(201,168,76,.4);color:var(--brass-light);}
+.faction-tab.active{background:rgba(201,168,76,.12);border-color:var(--brass);color:var(--brass-light);}
+.faction-panel{display:none;}
+.faction-panel.active{display:block;animation:fadeIn .3s ease;}
+.char-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.1rem;}
+.char-card{background:linear-gradient(135deg,rgba(26,18,8,.9),rgba(30,28,40,.9));border:1px solid rgba(201,168,76,.18);border-radius:8px;overflow:hidden;cursor:pointer;transition:all .3s;}
+.char-card:hover{border-color:var(--brass);transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.4),0 0 18px rgba(201,168,76,.1);}
+.char-header{padding:.9rem 1.1rem;display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid rgba(201,168,76,.1);background:linear-gradient(135deg,rgba(42,32,10,.5),transparent);}
+.char-name{font-family:'Cinzel',serif;font-size:.95rem;color:var(--brass-light);}
+.char-role{font-family:'Josefin Sans',sans-serif;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--brass-dark);margin-top:.15rem;}
+.char-pts{font-family:'Cinzel Decorative',serif;font-size:1.15rem;color:var(--brass);}
+.char-pts-lbl{font-family:'Josefin Sans',sans-serif;font-size:.52rem;color:var(--brass-dark);text-align:right;}
+.char-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(201,168,76,.08);border-bottom:1px solid rgba(201,168,76,.1);}
+.stat-cell{background:rgba(26,22,15,.8);padding:.38rem .2rem;text-align:center;}
+.stat-lbl{font-family:'Josefin Sans',sans-serif;font-size:.5rem;letter-spacing:.04em;color:var(--brass-dark);display:block;text-transform:uppercase;}
+.stat-val{font-family:'Cinzel',serif;font-size:.85rem;color:var(--steam);display:block;margin-top:.08rem;}
+.char-abilities{padding:.65rem 1.1rem;display:flex;flex-wrap:wrap;gap:.25rem;}
+.ability-tag{background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.18);color:var(--parchment-dark);font-family:'Josefin Sans',sans-serif;font-size:.6rem;letter-spacing:.04em;padding:.12rem .4rem;border-radius:3px;}
+.ability-tag.alc{background:rgba(74,158,204,.1);border-color:rgba(74,158,204,.28);color:var(--blue);}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,8,15,.85);z-index:1000;backdrop-filter:blur(4px);justify-content:center;align-items:center;padding:1rem;}
+.modal-overlay.open{display:flex;animation:fadeIn .2s ease;}
+.modal{background:linear-gradient(135deg,rgba(26,18,8,.98),rgba(20,20,35,.98));border:1px solid rgba(201,168,76,.4);border-radius:12px;max-width:680px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 25px 70px rgba(0,0,0,.7),0 0 35px rgba(201,168,76,.08);}
+.modal-head{padding:1.35rem 1.75rem;border-bottom:1px solid rgba(201,168,76,.18);background:linear-gradient(135deg,rgba(42,32,10,.5),transparent);display:flex;justify-content:space-between;align-items:flex-start;position:sticky;top:0;backdrop-filter:blur(10px);}
+.modal-title{font-family:'Cinzel',serif;font-size:1.4rem;color:var(--brass-light);}
+.modal-close{background:transparent;border:1px solid rgba(201,168,76,.3);color:var(--brass-dark);width:1.9rem;height:1.9rem;border-radius:50%;cursor:pointer;font-size:.95rem;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+.modal-close:hover{border-color:var(--brass);color:var(--brass-light);}
+.modal-body{padding:1.35rem 1.75rem;}
+.modal-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:.65rem;margin-bottom:1.25rem;}
+.ms{background:rgba(42,38,30,.6);border:1px solid rgba(201,168,76,.14);border-radius:5px;padding:.65rem .4rem;text-align:center;}
+.ms-lbl{font-family:'Josefin Sans',sans-serif;font-size:.58rem;letter-spacing:.08em;color:var(--brass-dark);text-transform:uppercase;display:block;}
+.ms-val{font-family:'Cinzel',serif;font-size:1.3rem;color:var(--steam);display:block;margin-top:.2rem;}
+.modal-section{margin-bottom:1.1rem;}
+.modal-section-title{font-family:'Cinzel',serif;font-size:.82rem;color:var(--brass);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.45rem;padding-bottom:.28rem;border-bottom:1px solid rgba(201,168,76,.13);}
+.weapon-entry{background:rgba(26,18,8,.5);border:1px solid rgba(201,168,76,.1);border-radius:4px;padding:.55rem .7rem;margin-bottom:.35rem;}
+.weapon-name{color:var(--brass-light);font-family:'Cinzel',serif;font-size:.83rem;}
+.weapon-stats{color:var(--parchment-dark);font-family:'Josefin Sans',sans-serif;font-size:.7rem;margin-top:.15rem;}
+.ability-entry{background:rgba(26,18,8,.5);border:1px solid rgba(201,168,76,.1);border-radius:4px;padding:.55rem .7rem;margin-bottom:.35rem;cursor:pointer;transition:border-color .2s;}
+.ability-entry:hover{border-color:rgba(201,168,76,.28);}
+.ability-ename{color:var(--brass-light);font-family:'Cinzel',serif;font-size:.83rem;}
+.ability-edesc{color:var(--parchment-dark);font-family:'IM Fell English',serif;font-size:.78rem;margin-top:.28rem;line-height:1.55;font-style:italic;display:none;}
+.ability-entry.expanded .ability-edesc{display:block;}
+
+/* ALCHEMANCY */
+.schools-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;margin-bottom:1.75rem;}
+.school-card{border-radius:8px;padding:1.1rem;text-align:center;cursor:pointer;transition:all .3s;border:2px solid transparent;}
+.sc-fire{background:linear-gradient(135deg,rgba(200,80,30,.14),rgba(120,40,10,.18));border-color:rgba(200,80,30,.28);}
+.sc-earth{background:linear-gradient(135deg,rgba(80,150,60,.14),rgba(40,100,20,.18));border-color:rgba(80,150,60,.28);}
+.sc-air{background:linear-gradient(135deg,rgba(74,158,204,.14),rgba(30,100,160,.18));border-color:rgba(74,158,204,.28);}
+.sc-water{background:linear-gradient(135deg,rgba(80,130,200,.14),rgba(30,60,150,.18));border-color:rgba(80,130,200,.28);}
+.sc-fire:hover,.sc-fire.active{border-color:rgba(200,100,50,.7);box-shadow:0 0 18px rgba(200,80,30,.2);}
+.sc-earth:hover,.sc-earth.active{border-color:rgba(100,180,80,.7);box-shadow:0 0 18px rgba(80,150,60,.2);}
+.sc-air:hover,.sc-air.active{border-color:rgba(100,180,220,.7);box-shadow:0 0 18px rgba(74,158,204,.2);}
+.sc-water:hover,.sc-water.active{border-color:rgba(80,130,220,.7);box-shadow:0 0 18px rgba(80,130,200,.2);}
+.sc-icon{font-size:2.2rem;display:block;margin-bottom:.4rem;}
+.sc-name{font-family:'Cinzel',serif;font-size:.95rem;color:var(--brass-light);letter-spacing:.08em;}
+.sc-theme{font-family:'Josefin Sans',sans-serif;font-size:.62rem;color:var(--parchment-dark);letter-spacing:.08em;margin-top:.15rem;}
+.invoc-list{display:none;}
+.invoc-list.active{display:block;animation:fadeIn .3s ease;}
+.invoc-card{background:linear-gradient(135deg,rgba(26,18,8,.9),rgba(30,28,40,.9));border:1px solid rgba(201,168,76,.13);border-radius:6px;padding:.9rem 1.1rem;margin-bottom:.65rem;display:grid;grid-template-columns:1fr auto;gap:.9rem;cursor:pointer;transition:border-color .2s;}
+.invoc-card:hover{border-color:rgba(201,168,76,.32);}
+.invoc-name{font-family:'Cinzel',serif;font-size:.92rem;color:var(--brass-light);}
+.invoc-desc{font-size:.78rem;color:var(--parchment-dark);font-style:italic;max-height:0;overflow:hidden;transition:max-height .3s;}
+.invoc-card.expanded .invoc-desc{max-height:200px;padding-top:.35rem;}
+.invoc-badges{display:flex;gap:.35rem;flex-direction:column;align-items:flex-end;flex-shrink:0;}
+.ib{font-family:'Josefin Sans',sans-serif;font-size:.6rem;letter-spacing:.04em;padding:.13rem .38rem;border-radius:3px;white-space:nowrap;}
+.ib-power{background:rgba(200,80,30,.14);border:1px solid rgba(200,80,30,.28);color:#E08060;}
+.ib-action{background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.22);color:var(--brass-light);}
+.ib-range{background:rgba(74,158,204,.1);border:1px solid rgba(74,158,204,.22);color:var(--blue);}
+.ib-diff{background:rgba(204,74,74,.1);border:1px solid rgba(204,74,74,.22);color:var(--red);}
+.ib-elem{background:rgba(61,184,140,.1);border:1px solid rgba(61,184,140,.22);color:var(--green);}
+
+/* ESSENCE TRACKER */
+.ess-tracker{background:rgba(26,18,8,.8);border:1px solid rgba(201,168,76,.18);border-radius:8px;padding:1.1rem;margin-bottom:1.75rem;}
+.ess-row{display:flex;align-items:center;gap:.9rem;margin-bottom:.65rem;}
+.ess-lbl{font-family:'Josefin Sans',sans-serif;font-size:.76rem;letter-spacing:.08em;width:75px;display:flex;align-items:center;gap:.35rem;}
+.ess-pips{display:flex;gap:.3rem;flex:1;}
+.pip{width:26px;height:26px;border-radius:50%;border:2px solid;cursor:pointer;transition:all .2s;}
+.pip-fire{border-color:rgba(200,80,30,.45);}
+.pip-fire.full{background:rgba(200,80,30,.65);box-shadow:0 0 7px rgba(200,80,30,.4);}
+.pip-earth{border-color:rgba(80,150,60,.45);}
+.pip-earth.full{background:rgba(80,150,60,.65);box-shadow:0 0 7px rgba(80,150,60,.4);}
+.pip-air{border-color:rgba(74,158,204,.45);}
+.pip-air.full{background:rgba(74,158,204,.65);box-shadow:0 0 7px rgba(74,158,204,.4);}
+.pip-water{border-color:rgba(80,130,200,.45);}
+.pip-water.full{background:rgba(80,130,200,.65);box-shadow:0 0 7px rgba(80,130,200,.4);}
+
+/* ABILITIES GLOSSARY */
+.glo-search{background:rgba(26,18,8,.8);border:1px solid rgba(201,168,76,.28);color:var(--parchment);font-family:'IM Fell English',serif;font-size:.88rem;padding:.68rem 1.1rem;border-radius:6px;width:100%;margin-bottom:.9rem;transition:border-color .2s;}
+.glo-search:focus{outline:none;border-color:var(--brass);}
+.glo-search::placeholder{color:var(--brass-dark);}
+.filter-pills{display:flex;gap:.45rem;margin-bottom:1.35rem;flex-wrap:wrap;}
+.filter-pill{background:transparent;border:1px solid rgba(201,168,76,.18);color:var(--parchment-dark);font-family:'Josefin Sans',sans-serif;font-size:.67rem;letter-spacing:.07em;text-transform:uppercase;padding:.27rem .65rem;border-radius:20px;cursor:pointer;transition:all .2s;}
+.filter-pill:hover,.filter-pill.active{background:rgba(201,168,76,.1);border-color:var(--brass);color:var(--brass-light);}
+.glo-entry{background:linear-gradient(135deg,rgba(26,18,8,.8),rgba(30,28,40,.8));border:1px solid rgba(201,168,76,.1);border-radius:6px;padding:.82rem 1.1rem;margin-bottom:.45rem;cursor:pointer;transition:border-color .2s;}
+.glo-entry:hover{border-color:rgba(201,168,76,.28);}
+.glo-entry.hidden{display:none;}
+.glo-head{display:flex;justify-content:space-between;align-items:center;}
+.glo-name{font-family:'Cinzel',serif;font-size:.92rem;color:var(--brass-light);}
+.glo-type{font-family:'Josefin Sans',sans-serif;font-size:.63rem;letter-spacing:.08em;color:var(--brass-dark);text-transform:uppercase;}
+.glo-desc{font-size:.8rem;color:var(--parchment-dark);line-height:1.6;font-style:italic;max-height:0;overflow:hidden;transition:max-height .3s,padding .2s;}
+.glo-entry.expanded .glo-desc{max-height:300px;padding-top:.55rem;}
+
+/* CANOPIC */
+.can-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.75rem;}
+.can-deck{text-align:center;padding:1.75rem;background:rgba(26,18,8,.8);border:2px dashed rgba(201,168,76,.2);border-radius:12px;cursor:pointer;transition:all .3s;}
+.can-deck:hover{border-color:rgba(201,168,76,.45);}
+.jar-icon{font-size:4.5rem;display:block;margin-bottom:.9rem;filter:drop-shadow(0 0 14px rgba(201,168,76,.3));}
+.draw-btn{background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(184,115,51,.15));border:1px solid var(--brass-dark);color:var(--brass-light);font-family:'Cinzel',serif;font-size:.88rem;padding:.7rem 1.35rem;border-radius:6px;cursor:pointer;transition:all .2s;}
+.draw-btn:hover{border-color:var(--brass);box-shadow:0 0 14px rgba(201,168,76,.2);}
+.spirit-card{background:linear-gradient(135deg,rgba(42,32,10,.95),rgba(30,25,45,.95));border:2px solid var(--brass-dark);border-radius:12px;padding:1.35rem;animation:revealCard .45s ease;}
+@keyframes revealCard{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+.sp-name{font-family:'Cinzel',serif;font-size:1.3rem;color:var(--brass-light);}
+.sp-title{font-family:'Josefin Sans',sans-serif;font-size:.7rem;color:var(--brass-dark);letter-spacing:.13em;text-transform:uppercase;margin-bottom:.9rem;}
+.sp-row{display:flex;justify-content:space-between;font-family:'Josefin Sans',sans-serif;font-size:.77rem;padding:.3rem 0;border-bottom:1px solid rgba(201,168,76,.08);}
+.dom-track{margin-top:.9rem;padding-top:.9rem;border-top:1px solid rgba(201,168,76,.14);}
+.dom-lbl{font-family:'Josefin Sans',sans-serif;font-size:.67rem;letter-spacing:.08em;color:var(--brass-dark);text-transform:uppercase;margin-bottom:.42rem;}
+.dom-pips{display:flex;gap:.28rem;}
+.dom-pip{width:19px;height:19px;border-radius:50%;border:2px solid rgba(204,74,74,.38);cursor:pointer;transition:all .2s;}
+.dom-pip.filled{background:rgba(204,74,74,.58);box-shadow:0 0 6px rgba(204,74,74,.38);}
+.dom-pip.danger{border-color:rgba(204,74,74,.75);}
+.dom-pip.danger.filled{background:rgba(204,74,74,.85);box-shadow:0 0 10px rgba(204,74,74,.55);}
+
+/* MISSIONS */
+.gen-btn{background:linear-gradient(135deg,rgba(201,168,76,.18),rgba(184,115,51,.18));border:2px solid var(--brass);color:var(--brass-light);font-family:'Cinzel',serif;font-size:.95rem;letter-spacing:.1em;padding:.9rem 2.2rem;border-radius:6px;cursor:pointer;transition:all .3s;display:block;margin:0 auto 1.5rem;}
+.gen-btn:hover{box-shadow:0 0 22px rgba(201,168,76,.22);transform:translateY(-2px);}
+.mission-box{background:linear-gradient(135deg,rgba(26,18,8,.95),rgba(20,20,35,.95));border:2px solid rgba(201,168,76,.28);border-radius:12px;padding:1.75rem;margin-bottom:1.75rem;min-height:260px;position:relative;overflow:hidden;}
+.mission-box::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M0 30 L30 0 L60 30 L30 60Z' fill='none' stroke='rgba(201,168,76,.03)' stroke-width='1'/%3E%3C/svg%3E") repeat;pointer-events:none;}
+.m-head{font-family:'Josefin Sans',sans-serif;font-size:.72rem;letter-spacing:.28em;color:var(--brass-dark);text-transform:uppercase;margin-bottom:.4rem;}
+.m-name{font-family:'Cinzel',serif;font-size:1.85rem;color:var(--brass-light);letter-spacing:.05em;margin-bottom:.9rem;}
+.m-detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;margin-top:1.35rem;}
+.m-detail{background:rgba(26,18,8,.55);border:1px solid rgba(201,168,76,.13);border-radius:5px;padding:.65rem;}
+.m-dlbl{font-family:'Josefin Sans',sans-serif;font-size:.58rem;letter-spacing:.13em;color:var(--brass-dark);text-transform:uppercase;display:block;margin-bottom:.2rem;}
+.m-dval{font-family:'Cinzel',serif;font-size:.82rem;color:var(--steam);}
+.m-obj{background:rgba(61,184,140,.06);border-left:2px solid var(--green);padding:.45rem .7rem;margin-bottom:.35rem;font-size:.8rem;color:var(--parchment-dark);}
+
+/* CAMPAIGN */
+.score-row{display:grid;grid-template-columns:1fr auto 1fr;gap:1.35rem;align-items:center;margin-bottom:2rem;}
+.score-side{text-align:center;}
+.score-faction{font-family:'Cinzel',serif;font-size:1rem;color:var(--brass-light);margin-bottom:.4rem;}
+.score-num{font-family:'Cinzel Decorative',serif;font-size:3.5rem;color:var(--brass);line-height:1;}
+.score-vs{font-family:'Cinzel Decorative',serif;font-size:1.35rem;color:var(--brass-dark);}
+.score-btns{display:flex;gap:.45rem;justify-content:center;margin-top:.45rem;}
+.score-btn{background:rgba(26,18,8,.8);border:1px solid rgba(201,168,76,.28);color:var(--brass-light);font-family:'Cinzel',serif;font-size:1.1rem;width:2.3rem;height:2.3rem;border-radius:4px;cursor:pointer;transition:all .2s;}
+.score-btn:hover{background:rgba(201,168,76,.1);}
+.camp-act{background:rgba(26,18,8,.8);border:1px solid rgba(201,168,76,.18);border-radius:8px;overflow:hidden;margin-bottom:1.35rem;}
+.act-head{background:linear-gradient(135deg,rgba(42,32,10,.8),rgba(30,28,40,.8));padding:.7rem 1.1rem;display:flex;align-items:center;gap:.9rem;border-bottom:1px solid rgba(201,168,76,.1);}
+.act-num{font-family:'Cinzel Decorative',serif;font-size:1.4rem;color:var(--brass-dark);min-width:1.8rem;}
+.act-title{font-family:'Cinzel',serif;font-size:.9rem;color:var(--brass-light);}
+.act-sub{font-family:'Josefin Sans',sans-serif;font-size:.67rem;color:var(--brass-dark);letter-spacing:.07em;}
+.camp-missions{display:grid;gap:1px;background:rgba(201,168,76,.07);}
+.m-cell{background:rgba(26,22,15,.9);padding:.9rem;cursor:pointer;transition:background .2s;position:relative;}
+.m-cell:hover{background:rgba(42,38,28,.9);}
+.m-cell.done{background:rgba(61,184,140,.06);}
+.m-cell.done::after{content:'✓';position:absolute;top:.45rem;right:.7rem;color:var(--green);font-size:.95rem;}
+.m-num{font-family:'Cinzel Decorative',serif;font-size:.85rem;color:var(--brass-dark);display:block;margin-bottom:.2rem;}
+.m-title{font-family:'Cinzel',serif;font-size:.78rem;color:var(--brass-light);}
+.m-desc{font-family:'Josefin Sans',sans-serif;font-size:.63rem;color:var(--parchment-dark);margin-top:.25rem;line-height:1.42;}
+
+/* DICE */
+.dice-section{max-width:780px;margin:0 auto;}
+.dice-main{background:linear-gradient(135deg,rgba(26,18,8,.95),rgba(26,26,40,.95));border:2px solid rgba(201,168,76,.28);border-radius:12px;padding:2.2rem;text-align:center;margin-bottom:1.75rem;position:relative;overflow:hidden;}
+.dice-main::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.07) 0%,transparent 60%);pointer-events:none;}
+.dice-num{font-family:'Cinzel Decorative',serif;font-size:6.5rem;color:var(--brass-light);line-height:1;display:block;min-height:7.5rem;filter:drop-shadow(0 0 18px rgba(201,168,76,.45));transition:all .1s;}
+.dice-num.rolling{animation:droll .55s ease;}
+@keyframes droll{0%{transform:scale(1) rotate(0)}25%{transform:scale(1.2) rotate(-14deg)}50%{transform:scale(.9) rotate(9deg)}75%{transform:scale(1.1) rotate(-4deg)}100%{transform:scale(1) rotate(0)}}
+.dice-lbl{font-family:'Josefin Sans',sans-serif;font-size:.75rem;letter-spacing:.22em;text-transform:uppercase;color:var(--brass-dark);margin-bottom:.4rem;}
+.dice-btns{display:flex;gap:.65rem;justify-content:center;flex-wrap:wrap;margin:1.35rem 0;}
+.d-btn{background:linear-gradient(135deg,rgba(42,38,30,.9),rgba(30,28,40,.9));border:1px solid rgba(201,168,76,.28);color:var(--brass-light);font-family:'Cinzel',serif;font-size:.88rem;padding:.7rem 1.15rem;border-radius:6px;cursor:pointer;transition:all .2s;letter-spacing:.04em;}
+.d-btn:hover{border-color:var(--brass);transform:translateY(-2px);box-shadow:0 4px 14px rgba(201,168,76,.18);}
+.d-btn.primary{background:linear-gradient(135deg,rgba(201,168,76,.18),rgba(184,115,51,.18));border-color:var(--brass);font-size:.95rem;padding:.9rem 1.75rem;}
+.spec-result{font-family:'Cinzel',serif;font-size:.95rem;padding:.45rem .9rem;border-radius:4px;margin:.45rem auto;display:inline-block;}
+.spec-crit{background:rgba(61,184,140,.14);color:var(--green);border:1px solid rgba(61,184,140,.38);}
+.spec-fumble{background:rgba(204,74,74,.14);color:var(--red);border:1px solid rgba(204,74,74,.38);}
+.opp-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:.9rem;align-items:center;margin:1rem 0;}
+.opp-side{background:rgba(26,26,40,.8);border:1px solid rgba(201,168,76,.13);border-radius:6px;padding:1.1rem;text-align:center;}
+.opp-side h4{font-family:'Cinzel',serif;font-size:.82rem;color:var(--brass-light);margin-bottom:.65rem;}
+.opp-val{font-family:'Cinzel Decorative',serif;font-size:2.8rem;color:var(--brass-light);display:block;min-height:3.2rem;}
+.mod-input{background:rgba(26,18,8,.8);border:1px solid rgba(201,168,76,.28);color:var(--brass-light);font-family:'Josefin Sans',sans-serif;font-size:.95rem;padding:.38rem .65rem;border-radius:4px;width:75px;text-align:center;display:block;margin:.45rem auto;}
+.vs-div{font-family:'Cinzel Decorative',serif;color:var(--brass-dark);font-size:1.15rem;text-align:center;}
+
+/* LORE */
+.lore-tabs{display:flex;gap:.4rem;margin-bottom:1.75rem;flex-wrap:wrap;}
+.lore-panel{display:none;}
+.lore-panel.active{display:block;animation:fadeIn .3s ease;}
+.lore-text{font-size:.92rem;line-height:1.88;color:var(--steam);max-width:780px;}
+.lore-text p{margin-bottom:1.1rem;}
+.lore-quote{font-family:'Cinzel',serif;font-size:1.05rem;color:var(--brass-light);font-style:italic;border-left:3px solid var(--brass-dark);padding:.7rem 1.35rem;margin:1.75rem 0;background:rgba(201,168,76,.05);}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--iron-dark);}
+::-webkit-scrollbar-thumb{background:var(--brass-dark);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--brass);}
+
+/* RESPONSIVE */
+@media(max-width:900px){.rules-layout{grid-template-columns:1fr}.rules-nav{position:static}.schools-grid{grid-template-columns:repeat(2,1fr)}.can-layout{grid-template-columns:1fr}.m-detail-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.header-inner{gap:.75rem}main{padding:1rem}.welcome-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+  <div class="header-inner">
+    <div>
+      <span class="logo-twisted">TWISTED</span>
+      <span class="logo-sub">Steampunk Skirmish · Companion</span>
+    </div>
+    <nav id="main-nav">
+      <button class="nav-btn active" data-panel="welcome">⚙ Home</button>
+      <button class="nav-btn" data-panel="rules">📜 Rules</button>
+      <button class="nav-btn" data-panel="characters">🎭 Characters</button>
+      <button class="nav-btn" data-panel="alchemancy">🔮 Alchemancy</button>
+      <button class="nav-btn" data-panel="abilities">⚡ Abilities</button>
+      <button class="nav-btn" data-panel="canopic">🏺 Canopic</button>
+      <button class="nav-btn" data-panel="missions">🗺 Missions</button>
+      <button class="nav-btn" data-panel="campaign">📋 Campaign</button>
+      <button class="nav-btn" data-panel="dice">🎲 Dice</button>
+      <button class="nav-btn" data-panel="lore">📖 Lore</button>
+    </nav>
+  </div>
+</header>
+<main>
+  <div id="panel-welcome" class="panel active"></div>
+  <div id="panel-rules" class="panel"></div>
+  <div id="panel-characters" class="panel"></div>
+  <div id="panel-alchemancy" class="panel"></div>
+  <div id="panel-abilities" class="panel"></div>
+  <div id="panel-canopic" class="panel"></div>
+  <div id="panel-missions" class="panel"></div>
+  <div id="panel-campaign" class="panel"></div>
+  <div id="panel-dice" class="panel"></div>
+  <div id="panel-lore" class="panel"></div>
+</main>
+</div>
+<div class="modal-overlay" id="char-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-head">
+      <div><div class="modal-title" id="m-name"></div><div id="m-sub" style="font-family:'Josefin Sans',sans-serif;font-size:.67rem;letter-spacing:.13em;color:var(--brass-dark);text-transform:uppercase;margin-top:.15rem;"></div></div>
+      <button class="modal-close" onclick="document.getElementById('char-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body" id="m-body"></div>
+  </div>
+</div>
+<script>
+// NAV
+document.getElementById('main-nav').addEventListener('click',e=>{
+  const btn=e.target.closest('.nav-btn');
+  if(!btn)return;
+  const id=btn.dataset.panel;
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+  builders[id]&&builders[id]();
+});
+
+const builders={};
+function reg(id,fn){builders[id]=fn;}
+
+// UTILITY
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a;}
+
+// ── WELCOME ──────────────────────────────────────────────
+(function(){
+  document.getElementById('panel-welcome').innerHTML=`
+<div style="text-align:center;padding:2.5rem 0">
+  <span class="welcome-emblem">⚙</span>
+  <h1 class="welcome-title">TWISTED</h1>
+  <p class="welcome-tagline">Steampunk Skirmish · The Complete Companion</p>
+  <div class="welcome-divider"></div>
+  <p style="font-size:.92rem;color:var(--parchment-dark);max-width:580px;margin:0 auto 2.2rem;line-height:1.82">
+    The complete companion for <em>Twisted</em> by Demented Games — all three books in one place: Core Rules v1.7, Scions of the Sands, and The Watchers.
+  </p>
+  <div class="welcome-grid">
+    ${[
+      {icon:'📜',title:'Rules & Tutorial',desc:'Full mechanics from movement to Alchemancy',panel:'rules'},
+      {icon:'🎭',title:'Characters',desc:'All rosters: Dickensians, Servants, Scions, Guild',panel:'characters'},
+      {icon:'🔮',title:'Alchemancy',desc:'All 40 invocations across four elemental schools',panel:'alchemancy'},
+      {icon:'⚡',title:'Abilities Glossary',desc:'Every special ability — searchable & filterable',panel:'abilities'},
+      {icon:'🏺',title:'Canopic Jars',desc:'Interactive spirit deck with dominance tracker',panel:'canopic'},
+      {icon:'🗺',title:'Mission Generator',desc:'Random deployments, objectives & terrain',panel:'missions'},
+      {icon:'📋',title:'Campaign',desc:'10-mission tracker with VP scoring',panel:'campaign'},
+      {icon:'🎲',title:'Dice Roller',desc:'D20s, opposed rolls & damage calculator',panel:'dice'},
+      {icon:'📖',title:'World Lore',desc:'The Engine, Victorian London, factions',panel:'lore'},
+    ].map(c=>`<div class="welcome-card" onclick="navTo('${c.panel}')">
+      <span class="wc-icon">${c.icon}</span>
+      <div class="wc-title">${c.title}</div>
+      <div class="wc-desc">${c.desc}</div>
+    </div>`).join('')}
+  </div>
+  <p style="font-family:'Josefin Sans',sans-serif;font-size:.68rem;letter-spacing:.18em;color:var(--brass-dark)">RULES v1.7 · SCIONS OF THE SANDS · THE WATCHERS</p>
+</div>`;
+})();
+
+// ── RULES ────────────────────────────────────────────────
+reg('rules',function(){
+  if(document.getElementById('panel-rules').innerHTML.trim())return;
+  document.getElementById('panel-rules').innerHTML=`
+<div class="section-header"><h2 class="section-title">Rules & Tutorial</h2><p class="section-subtitle">Complete game mechanics reference</p></div>
+<div class="rules-layout">
+<aside class="rules-nav">
+  <div class="rules-nav-title">Contents</div>
+  ${[
+    ['basics','🎯 Core Basics'],['turn','🔄 Turn Sequence'],['favour','⭐ Favour & Eye'],
+    ['movement','👣 Movement'],['ranged','🏹 Ranged Combat'],['closecombat','⚔️ Close Combat'],
+    ['alcsystem','🔮 Alchemancy'],['states','💀 Conditions'],['terrain','🏛 Terrain'],
+    ['grenades','💣 Templates'],['company','🏗 Company Building'],
+  ].map(([k,l],i)=>`<button class="rules-nav-item${i===0?' active':''}" onclick="showRule('${k}',this)">${l}</button>`).join('')}
+</aside>
+<div class="rules-content">
+
+<div class="rules-page active" id="rp-basics">
+  <div class="rule-block"><h3>🎲 The D20 System</h3>
+    <p>Twisted uses opposed D20 rolls — both players roll and add their relevant characteristic. Highest wins. Ties go to whoever holds <strong style="color:var(--brass-light)">Favour of The Engine</strong>.</p>
+    <div class="highlight-box"><strong>Natural 1</strong> = always fails. &nbsp; <strong>Natural 20</strong> = always succeeds (Critical Hit in combat).</div>
+    <p>Pre-measuring is always allowed at any time before committing to an action.</p>
+  </div>
+  <div class="rule-block"><h3>📊 Characteristics</h3>
+    <p>Every character has these stats on their card:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.5rem">
+      ${['SPD Speed','STR Strength','FIN Finesse','CC ATT','CC DEF','RNG ATT','RNG DEF','ARM Armour','ALC Alchemancy','LIFE'].map(s=>`<span class="stat-pill">${s}</span>`).join('')}
+    </div>
+  </div>
+  <div class="rule-block"><h3>⚡ Actions</h3>
+    <p>Each character gets <strong style="color:var(--brass-light)">2 Actions</strong> per Activation. Actions include: Move, Ranged Attack, Close Combat, Alchemancy, or Special abilities costing an Action.</p>
+    <div class="notice tip">Some abilities grant free Actions or change action costs. Check each character's card carefully.</div>
+  </div>
+  <div class="rule-block"><h3>🩸 Wounded & Out of Action</h3>
+    <p>When Life drops into the <strong style="color:var(--rust-light)">red boxes</strong> on the card: all characteristics −2 (except Life and Armour). At 0 Life the character is <strong style="color:var(--rust-light)">Out of Action</strong> and removed.</p>
+  </div>
+</div>
+
+<div class="rules-page" id="rp-turn">
+  <div class="turn-sequence">
+    ${[['I','Sorting','Arrange activation cards'],['II','Eye of Engine','Draw 1 card (2 with Favour)'],['III','Activation','Alternate — each character takes 2 Actions'],['IV','Maintenance','Recover Essences, clear effects']].map(([n,t,d])=>`<div class="turn-step"><span class="ts-num">${n}</span><span class="ts-name">${t}</span><div class="ts-desc">${d}</div></div>`).join('')}
+  </div>
+  <div class="rule-block"><h3>I. Sorting Phase</h3><p>Arrange your Activation Deck in any order you choose. Abilities like <em>Organised</em> can further influence this.</p></div>
+  <div class="rule-block"><h3>II. Eye of The Engine Draw</h3><p>Draw one Eye card from the shared deck. With Favour, draw two and keep your choice. Eye cards are played at specific times (Pre-Activation, During, Maintenance, or Special). Persistent cards remain until triggered.</p>
+    <div class="highlight-box"><strong>Eyecon Symbols</strong> only matter when Tempting Fate — red Eyecon = lose Favour.</div>
+  </div>
+  <div class="rule-block"><h3>III. Activation Phase</h3><p>Players alternate activating one character each. Each character takes up to 2 Actions. Once all characters have activated, move to Maintenance.</p></div>
+  <div class="rule-block"><h3>IV. Maintenance Phase</h3><p>Recover Essences (half free, or all for 2 Actions during Activation). Resolve Bleed, Regenerate, Venom. Clear Stun and temporary conditions.</p></div>
+</div>
+
+<div class="rules-page" id="rp-favour">
+  <div class="rule-block"><h3>⭐ Favour of The Engine</h3>
+    <p>One company holds Favour at any time. It provides:</p>
+    <ul>
+      <li><strong style="color:var(--brass-light)">Tie-breaker:</strong> Win all tied opposed rolls</li>
+      <li><strong style="color:var(--brass-light)">Re-roll:</strong> Once per turn. Lose Favour if the re-roll also fails.</li>
+      <li><strong style="color:var(--brass-light)">Extra Eye card:</strong> Draw 2, keep 1</li>
+    </ul>
+    <div class="notice warning"><strong>Losing Favour:</strong> Failed re-roll, or drawing a red Eyecon while Tempting Fate.</div>
+  </div>
+  <div class="rule-block"><h3>🎴 Tempting Fate</h3><p>Any character may draw an Eye card during any action for a possible bonus. If it shows a red Eyecon and you hold Favour, you lose it immediately. Can be used even while under a Persistent Eye card.</p></div>
+</div>
+
+<div class="rules-page" id="rp-movement">
+  <div class="rule-block"><h3>👣 Movement</h3><p>Move up to <strong style="color:var(--brass-light)">Speed</strong> inches per Move Action. Characters have a 180° front arc — attacks from outside it gain bonuses.</p></div>
+  <div class="rule-block"><h3>🏃 Running</h3><p>Use both Actions on movement. Grants <strong style="color:var(--brass-light)">+1 Defence vs Ranged</strong>.</p></div>
+  <div class="rule-block"><h3>🧗 Climbing</h3><p>Half Speed. Difficulty 12 Finesse or Strength check or no movement.</p></div>
+  <div class="rule-block"><h3>🦘 Jumping</h3>
+    <ul><li>Up to 1": Diff 6</li><li>1"–2": Diff 9</li><li>2"–4": Diff 12</li><li>4"–6": Diff 15</li></ul>
+  </div>
+  <div class="rule-block"><h3>⚠️ Threatened Area</h3><p>1" around any character. Moving through: Opposed Finesse or the threatening character makes a free CC attack.</p></div>
+  <div class="rule-block"><h3>🏚 Difficult Terrain</h3><p>Costs 2" per 1" traveled. Running through: Difficulty 12 Finesse or go Prone.</p></div>
+  <div class="rule-block"><h3>🏠 Buildings</h3><p>Break in: Difficulty 14 Finesse; fail = D4 damage. Doors auto-lock after use.</p></div>
+</div>
+
+<div class="rules-page" id="rp-ranged">
+  <div class="rule-block"><h3>🎯 Range Bands</h3>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-top:.5rem">
+      ${[['Short','±0','var(--green)'],['Medium','−2','var(--brass-light)'],['Long','−4','var(--copper)'],['Extreme','−6','var(--red)']].map(([r,m,c])=>`<div style="text-align:center;background:rgba(26,18,8,.5);border:1px solid rgba(201,168,76,.2);border-radius:4px;padding:.5rem"><div style="font-family:'Cinzel',serif;color:${c};font-size:.78rem">${r}</div><div style="font-family:'Cinzel Decorative',serif;font-size:1.4rem;color:${c}">${m}</div></div>`).join('')}
+    </div>
+  </div>
+  <div class="rule-block"><h3>🎯 Cover & LOS</h3><p>180° front arc required. Cover (terrain or character between attacker and target) = <strong style="color:var(--brass-light)">+2 Ranged Defence</strong>.</p></div>
+  <div class="rule-block"><h3>💥 Damage</h3><p>Weapon dice + modifiers − Armour = Life lost. Minimum 0.</p><div class="example-box">D8+3 rolls 9. Target Armour 4. Damage = 9−4 = 5 Life lost.</div></div>
+  <div class="rule-block"><h3>⚔ Firing Into CC</h3><ul><li><strong style="color:var(--brass-light)">Err on Caution:</strong> −4 to attack; only your target can be hit</li><li><strong style="color:var(--brass-light)">Blaze Away:</strong> Random target from all characters in melee</li></ul></div>
+</div>
+
+<div class="rules-page" id="rp-closecombat">
+  <div class="rule-block"><h3>⚔️ Initiating</h3><p>Spend a Move Action to enter base-to-base contact. CC is resolved immediately. 3+ characters in continuous contact = a Melee.</p></div>
+  <div class="rule-block"><h3>🎲 Modifiers</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+      ${[['Charging','+1 Attack, +1 Damage, −1 Defence'],['Jump Attack','+2 Attack, +1 Damage, −1 Defence'],['Outnumbered','+1 per extra attacker'],['Flanked / Rear','+1 attacker (rear: first round only)']].map(([n,d])=>`<div class="highlight-box"><strong>${n}:</strong><br>${d}</div>`).join('')}
+    </div>
+  </div>
+  <div class="rule-block"><h3>🚪 Disengaging</h3><p>Finesse check vs Difficulty 10 + opponent's CC Attack. Fail = free CC attack against you.</p></div>
+  <div class="rule-block"><h3>💥 Critical Hits (Natural 20)</h3><ul><li>Auto-hit</li><li>Target's Armour halved for this attack</li><li>Difficulty 10 + damage Finesse check or Stunned</li></ul><div class="notice">Razor Sharp weapon property: Critical on 19 OR 20.</div></div>
+</div>
+
+<div class="rules-page" id="rp-alcsystem">
+  <div class="rule-block"><h3>🔮 Four Schools</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.5rem">
+      <div style="background:rgba(200,80,30,.08);border:1px solid rgba(200,80,30,.22);border-radius:4px;padding:.65rem"><span style="color:#E08060">🔥 Fire</span> — Destruction & Enhancement</div>
+      <div style="background:rgba(80,150,60,.08);border:1px solid rgba(80,150,60,.22);border-radius:4px;padding:.65rem"><span style="color:#70C060">🌿 Earth</span> — Life, Death & Summoning</div>
+      <div style="background:rgba(74,158,204,.08);border:1px solid rgba(74,158,204,.22);border-radius:4px;padding:.65rem"><span style="color:var(--blue)">💨 Air</span> — Protection & Movement</div>
+      <div style="background:rgba(80,130,200,.08);border:1px solid rgba(80,130,200,.22);border-radius:4px;padding:.65rem"><span style="color:#7090D0">💧 Water</span> — Healing & Weakening</div>
+    </div>
+  </div>
+  <div class="rule-block"><h3>💎 Essences & Recovery</h3><ul><li><strong style="color:var(--brass-light)">1 Action:</strong> Recover half (round down, min 1)</li><li><strong style="color:var(--brass-light)">2 Actions:</strong> Recover all</li></ul></div>
+  <div class="rule-block"><h3>✨ Calling Invocations</h3><p>Spend Actions and Essences listed, roll D20 + Alchemancy vs Difficulty.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:.65rem">
+      <div class="highlight-box" style="text-align:center"><strong>Focussed</strong><br>2 Actions → +4 roll</div>
+      <div class="highlight-box" style="text-align:center;background:rgba(61,184,140,.06);border-color:rgba(61,184,140,.28)"><strong>Perfect (20)</strong><br>Half Essences, max dice</div>
+      <div class="highlight-box" style="text-align:center;background:rgba(204,74,74,.06);border-color:rgba(204,74,74,.28)"><strong>Backfire (1)</strong><br>All Essences lost, draw Eye card</div>
+    </div>
+  </div>
+</div>
+
+<div class="rules-page" id="rp-states">
+  <div class="rule-block"><h3>💀 Status Conditions</h3>
+    ${[
+      ['Wounded (red boxes)','All characteristics −2 except Life & Armour','var(--rust-light)'],
+      ['Out of Action','Life = 0; removed from table','var(--rust-light)'],
+      ['Stunned','Miss next Activation entirely; clears in Maintenance','#E8C060'],
+      ['Prone','−2 CC Attack/Defence; can\'t shoot; stand free at Activation start','#D0A050'],
+      ['Bleed','Lose D4 Life each Maintenance; Diff 12 Finesse to clear','var(--rust-light)'],
+      ['Entangled','Can\'t move; −2 CC; break free with Strength check','#A070D0'],
+      ['Pinned','Can\'t move or turn; Diff 12 Str to break (take D4 damage)','var(--blue)'],
+    ].map(([n,d,c])=>`<div class="highlight-box" style="margin-bottom:.4rem"><strong style="color:${c}">${n}:</strong> ${d}</div>`).join('')}
+  </div>
+</div>
+
+<div class="rules-page" id="rp-terrain">
+  <div class="rule-block"><h3>🏛 Terrain Types</h3><ul><li><strong style="color:var(--brass-light)">Open Ground:</strong> No effect</li><li><strong style="color:var(--brass-light)">Difficult Terrain:</strong> 2" per 1" traveled</li><li><strong style="color:var(--brass-light)">Impassable:</strong> Cannot traverse</li><li><strong style="color:var(--brass-light)">Cover:</strong> +2 Ranged Defence</li></ul></div>
+  <div class="rule-block"><h3>🏠 Buildings</h3><ul><li>Break in: Diff 14 Finesse; fail = D4 damage</li><li>Doors auto-lock after use</li><li>Interior counts as cover from outside</li></ul></div>
+  <div class="rule-block"><h3>✨ Fascinating Features (Optional)</h3><p>Roll D6 for number of features (1–3), D20 for type. Includes: Guy's Gunpowder (explosive!), Errant Essences (free pickup), Sewer Slime, Sinkholes, Leaking Gas Lamps, and more.</p></div>
+</div>
+
+<div class="rules-page" id="rp-grenades">
+  <div class="rule-block"><h3>💣 Grenades</h3><p>Target a point in range. Ranged Attack vs Difficulty 8. Miss = scatter: D8 direction, D6" distance.</p></div>
+  <div class="rule-block"><h3>💥 Blast Templates</h3><ul><li><strong>Small Blast:</strong> 2" radius</li><li><strong>Large Blast:</strong> 4" radius</li></ul><p style="margin-top:.5rem">Fully covered: full damage (Diff 15 Finesse to dodge). Partially covered: Diff 15 Finesse; pass = no damage + move 1" clear.</p></div>
+  <div class="rule-block"><h3>🔺 Cone Templates</h3><p>Two sizes: 6" and 9". Originate from attacker's base. Same Finesse checks as Blast.</p></div>
+</div>
+
+<div class="rules-page" id="rp-company">
+  <div class="rule-block"><h3>🏗 Company Building</h3><p>Standard game: <strong style="color:var(--brass-light)">200 points</strong>. Must include at least 1 Leader. 6–10 characters total. Leftover points spent on Equipment from Dr Disraeli's Delights.</p></div>
+  <div class="rule-block"><h3>🤝 Guild Allies</h3><ul>
+    <li><strong style="color:var(--brass-light)">Anarchists</strong> — ally with Dickensians (not if company has Horace De Havilland)</li>
+    <li><strong style="color:var(--brass-light)">Pragmatists</strong> — ally with Servants of the Engine</li>
+    <li><strong style="color:var(--brass-light)">Ethicists</strong> — ally with any faction (not if company has Avatar of Set)</li>
+  </ul></div>
+  <div class="rule-block"><h3>🎲 Shifting Loyalties (Optional)</h3><p>At trigger events, roll D20. Low result: roll D6 for Guild ally — 1=Double Cross (joins enemy!), 2=leaves, 3=skip Activation, 4–6=carry on.</p></div>
+</div>
+
+</div><!-- rules-content -->
+</div><!-- rules-layout -->`;
+});
+
+// ── CHARACTER DATA ────────────────────────────────────────
+const CHARS={
+dickensians:[
+  {name:"Bill Psyches",role:"Leader",pts:46,weapons:"Cudgel D10+2+Str (Stun) · Large Bore Pistol D12+5",abilities:["Lumber","Ammunition","Threaten"],lore:"Hulking leader of the Dickensians. Terrorises Victorian London with brutal efficiency.",stats:{SPD:4,STR:6,FIN:3,"CC ATT":6,"CC DEF":4,"RNG ATT":6,"RNG DEF":3,ARM:8,LIFE:28}},
+  {name:"Nancy",role:"Alchemancer",pts:34,schools:["Fire","Earth","Air","Water"],weapons:"Whip Shawl D6+3 (Entangle) · Knife D6+6 (Razor Sharp)",abilities:["Disturbing","Engine Linked","Murderous"],lore:"Alchemancer of great power. Her disturbing presence unsettles even hardened fighters.",stats:{SPD:4,STR:3,FIN:4,"CC ATT":4,"CC DEF":4,"RNG ATT":4,"RNG DEF":5,ARM:6,ALC:7,LIFE:19}},
+  {name:"Feygin",role:"Rogue",pts:33,weapons:"Knife",abilities:["Pickpocket","Inconspicuous","Curious Tinkerer"],lore:"Master manipulator. Extraordinary Finesse makes him elusive and unpredictable.",stats:{SPD:4,STR:4,FIN:8,"CC ATT":5,"CC DEF":5,"RNG ATT":4,"RNG DEF":4,ARM:6,LIFE:20}},
+  {name:"Dodger",role:"Scout",pts:29,weapons:"Wicked Pick D8+6 · Sniper Pistol D8+3 (Range 5/7/12/17)",abilities:["Scout","Sniper","Swift Step","Wheeled"],lore:"Fast wheeled scout with exceptional long-range capability.",stats:{SPD:"7⊕",STR:4,FIN:5,"CC ATT":5,"CC DEF":6,"RNG ATT":6,"RNG DEF":5,ARM:0,LIFE:9}},
+  {name:"Ollyver",role:"Berserker",pts:38,weapons:"Claws & Teeth",abilities:["Transform","Unstable","Berserk","Furious Charge","Rend","Unthinking"],lore:"A terrifying transformation awaits within Ollyver. When the beast emerges, all reason is lost.",stats:{SPD:4,STR:"7/10",FIN:"3/1","CC ATT":"5/7","CC DEF":4,ARM:"0/7",LIFE:30}},
+  {name:"Sowerberry",role:"Deathcaller",pts:31,weapons:"Shovel D4+Str (Ethereal) · Scythe D6 (Bleed, Time)",abilities:["Aura of Death","Insubstantial","Timestop"],lore:"Exists partially outside reality. Surrounded by an aura of death.",stats:{SPD:4,STR:2,FIN:4,"CC ATT":3,"CC DEF":5,ARM:4,LIFE:20}},
+  {name:"Bullseye",role:"Dog",pts:16,weapons:"Nasty Teeth D6+3+Str",abilities:["Expendable (Bill)","Latch On"],lore:"Bill's loyal hound. Expendable means Bill can redirect attacks to Bullseye.",stats:{SPD:5,STR:4,FIN:5,"CC ATT":4,ARM:6,LIFE:16}},
+  {name:"Urkin Shooter",role:"Minion",pts:14,weapons:"Dodgy Gun D8+5 (Ramshackle)",abilities:["Insignificant","Lurk","Ramshackle"],lore:"Unreliable but numerous. Guns jam as often as they fire.",stats:{SPD:4,STR:3,FIN:3,"CC ATT":2,"RNG ATT":3,ARM:5,LIFE:10}},
+  {name:"Urkin Slasher",role:"Minion",pts:12,weapons:"Pointy Things D6+2+Str",abilities:["Insignificant","Backstab"],lore:"Disposable close combat fodder.",stats:{SPD:4,STR:3,FIN:3,"CC ATT":3,ARM:5,LIFE:9}},
+  {name:"Urkin Alchemancer",role:"Alchemancer",pts:30,schools:["Fire","Earth"],weapons:"Staff",abilities:["Voodoo","Insignificant"],lore:"Surprisingly powerful for their size.",stats:{SPD:4,STR:5,FIN:4,"CC ATT":4,ARM:6,ALC:4,LIFE:17}},
+  {name:"Bloodrage Urkin",role:"Berserker",pts:30,weapons:"Fists",abilities:["Transform","Unstable","Berserk","Tough","Unthinking"],lore:"A monstrous transformation lurks within.",stats:{SPD:5,STR:"6/9",FIN:"3/1","CC ATT":5,ARM:7,LIFE:20}},
+  {name:"Ratcatcha",role:"Skirmisher",pts:25,weapons:"Knives",abilities:["Backstab","Entangle","Swift Step"],lore:"Quick and dirty fighter specialising in catching enemies off-guard.",stats:{SPD:4,STR:3,FIN:4,"CC ATT":4,"CC DEF":4,ARM:6,LIFE:17}},
+  {name:"Rozzer",role:"Officer",pts:22,weapons:"Truncheon (Wallop) · Pistol",abilities:["Wallop","Challenge"],lore:"Corrupt officer turned gang enforcer.",stats:{SPD:4,STR:3,FIN:4,"CC ATT":3,ARM:5,LIFE:15}},
+  {name:"Dawg & Flea",role:"Beast Handler",pts:25,weapons:"Bite (Latch On)",abilities:["Latch On","Flit","Sniff Out"],lore:"Man and beast as one — deadly trackers.",stats:{SPD:4,STR:4,FIN:3,"CC ATT":5,ARM:6,LIFE:17}},
+],
+servants:[
+  {name:"Nouveau",role:"Leader",pts:45,schools:["Fire","Air"],weapons:"Sabre D8+3+Str · Duelling Pistol D8+3",abilities:["Servant of Engine","Challenge","Determined"],lore:"Elegant and deadly. His Engine connection makes him unpredictable.",stats:{SPD:5,STR:5,FIN:5,"CC ATT":6,"CC DEF":5,"RNG ATT":6,"RNG DEF":5,ARM:7,ALC:2,LIFE:20}},
+  {name:"M'Dusa",role:"Alchemancer",pts:33,schools:["Fire","Earth","Air","Water"],weapons:"The Serpent D6+6",abilities:["Seeker Snakes","Disturbing","Glide","Cowl Form"],lore:"Two forms, each terrifying. Seeker Snakes auto-hit with unerring accuracy.",stats:{SPD:"5/3",STR:"3/5",FIN:"5/4","CC ATT":"4/5",ARM:"6/7",ALC:7,LIFE:19}},
+  {name:"Launcelot",role:"Heavy",pts:47,weapons:"Sword D8+3+Str (Bleed) · The Lance D12+5 (Penetrating, Slow)",abilities:["By Engine's Will","Shatter","Stand and Deliver"],lore:"The Servants' hardest hitter. Devastating at range and in melee.",stats:{SPD:4,STR:6,FIN:4,"CC ATT":7,"CC DEF":5,"RNG ATT":6,"RNG DEF":4,ARM:9,LIFE:25}},
+  {name:"Nightingale",role:"Support",pts:31,schools:["Fire","Earth","Air","Water"],weapons:"Pistol",abilities:["Lamplight","Flit","Immovable Object"],lore:"A shining beacon — Lamplight grants allies attack bonuses.",stats:{SPD:"5/3",STR:4,FIN:4,"CC ATT":4,"CC DEF":5,ARM:6,ALC:6,LIFE:18}},
+  {name:"Tesla",role:"Mechanic",pts:32,weapons:"Mechanical fists · Overload Coil",abilities:["Mechanical","Overcharge Edison","Overload"],lore:"Brilliant but unstable. Overcharging transforms him into a devastating engine.",stats:{SPD:4,STR:"4/6",FIN:6,"CC ATT":"5/7","CC DEF":"5/4",ARM:"6/10",ALC:1,LIFE:19}},
+  {name:"Gretel & Hansel",role:"Sibling Pair",pts:31,weapons:"Wands (6 uses) · Hand of Hansel",abilities:["Linked Finesse","Nimble","Wands"],lore:"Siblings whose linked Finesse makes them exceptionally nimble.",stats:{SPD:6,STR:4,FIN:7,"CC ATT":5,"CC DEF":6,ARM:0,LIFE:"20(6)"}},
+  {name:"Blacksmith",role:"Gentlefolk",pts:26,weapons:"Hammer",abilities:["Mechanical","Knockback","Smoke","Shatter"],lore:"Heavy armoured brute. Smoke obscures allies; Shatter reduces enemy Armour.",stats:{SPD:3,STR:5,FIN:2,"CC ATT":4,"CC DEF":3,ARM:10,LIFE:17}},
+  {name:"Lancer",role:"Gentlefolk",pts:29,weapons:"Lance D8+3+Str (Reach, Thrust) · Pistol",abilities:["Hard Target","Thundering Charge","Run Through"],lore:"Fast cavalry charge with devastating lance. Thundering Charge ignores Outnumbering limits.",stats:{SPD:6,STR:4,FIN:4,"CC ATT":5,"CC DEF":4,ARM:6,LIFE:19}},
+  {name:"Teacher",role:"Gentlefolk",pts:19,weapons:"Switch D4+Str (Pain)",abilities:["Stop It You Naughty Boy","Stern","Lecture"],lore:"Budget option with surprisingly disruptive abilities.",stats:{SPD:4,STR:3,FIN:3,"CC ATT":3,"CC DEF":3,ARM:6,LIFE:15}},
+  {name:"Sailor",role:"Gentlefolk",pts:26,weapons:"Cutlass · Cannon (Ammunition)",abilities:["Consolidation","Stand Firm"],lore:"Steady anchor. Stand Firm negates knockback.",stats:{SPD:4,STR:4,FIN:3,"CC ATT":3,"CC DEF":3,ARM:6,LIFE:17}},
+],
+scions:[
+  {name:"Carter",role:"Leader (Expedition)",pts:36,schools:["Fire","Earth"],weapons:"Revolver D8+3 (Ammunition) · Combat Knife D6+1+Str",abilities:["Canopic Jar","Scout","Ammo Carrier","Keen Observer"],lore:"The archaeologist who started it all. His curiosity opened the tomb.",stats:{SPD:4,STR:4,FIN:5,"CC ATT":4,"CC DEF":6,"RNG ATT":6,"RNG DEF":5,ARM:4,LIFE:22}},
+  {name:"Agatha",role:"Diarist",pts:30,weapons:"Pocket Pistol D8+1 · Umbrella D4+1+Str",abilities:["Canopic Jar","Keen Observer","Aid","Organised"],lore:"Meticulous and capable. Organised rearranges the Activation deck.",stats:{SPD:4,STR:4,FIN:4,"CC ATT":4,"CC DEF":4,"RNG ATT":6,"RNG DEF":5,ARM:6,LIFE:19}},
+  {name:"Hercule",role:"Gentlefolk Servant",pts:27,weapons:"Satchel Arm D6+3 (Stun) · Revolver D8+3",abilities:["Mechanical","Ammo Carrier","Spotter","Loyal (Agatha)"],lore:"Agatha's impeccably organised Gentlefolk servant.",stats:{SPD:4,STR:4,FIN:4,"CC ATT":4,"CC DEF":5,ARM:8,LIFE:17}},
+  {name:"Indigo Ford",role:"Adventurer",pts:34,weapons:"Bullwhip D6+3 (Pain, Entangle) · Pistol D8+3 (Piercing)",abilities:["Canopic Jar","Scout","Snap Shot","Shifty","Lucky"],lore:"Most capable fighter of the expedition. Lucky walks away from fatal situations.",stats:{SPD:5,STR:4,FIN:6,"CC ATT":5,"CC DEF":5,"RNG ATT":7,"RNG DEF":5,ARM:5,LIFE:22}},
+  {name:"Horace De Havilland",role:"Gentleman",pts:31,schools:["Fire","Earth"],weapons:"Blaze Jack D4+4 · Hunting Knife D6+2+Str",abilities:["Canopic Jar","Alchemantic Bombs","Drunkard"],lore:"Insufferable aristocrat with hidden depths. His drinking is his greatest tactical asset.",stats:{SPD:4,STR:3,FIN:4,"CC ATT":4,"CC DEF":4,ARM:6,ALC:4,LIFE:20}},
+  {name:"Avatar of Set",role:"Boss",pts:53,weapons:"Khopesh D10+2+Str (Sweep) · Drain D4+2",abilities:["Avatar","Drain","Regenerate","Terror","Sweep","Resilient"],lore:"Ancient Egyptian deity made manifest. Loses power as allies fall.",stats:{SPD:8,STR:8,FIN:4,"CC ATT":6,"CC DEF":5,"RNG ATT":4,"RNG DEF":5,ARM:6,LIFE:45}},
+  {name:"Guardian Dervish",role:"Warrior",pts:25,weapons:"Scimitar D8+6 · Throwing Knives",abilities:["Canopic Jar","Scout","Stealthy","Spring Attack","Supernatural Speed"],lore:"Fanatical warriors who spring from cover with terrifying speed.",stats:{SPD:6,STR:5,FIN:4,"CC ATT":4,"CC DEF":4,ARM:6,LIFE:19}},
+  {name:"Guardian Hunter",role:"Ranger",pts:20,weapons:"Jezzail D10+3 (Scope) · Scimitar D6+2",abilities:["Canopic Jar","Scout","Stealthy","Aim","Opportunity Fire","Hunter's Instinct"],lore:"Patient and deadly at range.",stats:{SPD:5,STR:3,FIN:5,"CC ATT":3,"CC DEF":4,"RNG ATT":5,"RNG DEF":4,ARM:5,LIFE:15}},
+  {name:"Hound of Set",role:"Beast",pts:18,weapons:"Savage Fangs D6+3 (Bring 'em Down, Pinning)",abilities:["Flit","Pack Hunter","Venom"],lore:"Terrifyingly fast. Hunt in packs with devastating effect.",stats:{SPD:6,STR:3,FIN:5,"CC ATT":4,"CC DEF":2,ARM:5,LIFE:12}},
+  {name:"Overseer of Hounds",role:"Commander",pts:31,weapons:"Flail D8+2 (Pain, Reach) · Hound Lure",abilities:["Overseer (Hounds)","Canopic Jar","Reaction","Dracon"],lore:"Commands the Hounds. His rage when a Hound falls is terrifying.",stats:{SPD:4,STR:5,FIN:3,"CC ATT":4,"CC DEF":4,ARM:6,LIFE:20}},
+  {name:"Rotten Mummy",role:"Undead Construct",pts:30,weapons:"Scarab Mace D10+3 (Razor Sharp)",abilities:["Regenerate","Stern","Insubstantial","Amorphous"],lore:"No Wounded state. Fights at full power until destroyed — then may rise again.",stats:{SPD:4,STR:5,FIN:2,"CC ATT":4,ARM:6,LIFE:20}},
+],
+guild:[
+  {name:"Monkey",role:"Ethicist Operative",pts:35,weapons:"Staff D8+3 (Reach)",abilities:["Impetuous","Multi Strike","Swift","Reach"],lore:"The Ethicists' finest. A whirling dervish who cuts through crowds with ease.",stats:{SPD:5,STR:5,FIN:5,"CC ATT":6,"CC DEF":5,ARM:6,LIFE:20}},
+  {name:"Tricia Harker",role:"Pragmatist Operative",pts:32,weapons:"Repeater Riot Gun D8+4 (Multi Fire, Heavy Hit)",abilities:["Heavy Hit","Scout","Aim"],lore:"Heavy firepower. Her Repeater staggers targets back with every hit.",stats:{SPD:4,STR:4,FIN:5,"CC ATT":4,"CC DEF":5,"RNG ATT":6,"RNG DEF":5,ARM:6,LIFE:19}},
+  {name:"Pigsty",role:"Anarchist Operative",pts:28,weapons:"Muck Rake D8+3 (Catch) · Swine Pistol D8+3 (Sicken)",abilities:["Catch","Impetuous","Oooo — Ladies!"],lore:"Brutish Anarchist with a predictable weakness for female characters.",stats:{SPD:4,STR:6,FIN:3,"CC ATT":6,"CC DEF":4,ARM:7,LIFE:22}},
+  {name:"Tinker Belle",role:"Anarchist Operative",pts:30,weapons:"Wrench D10+3 (2 uses, Crushing)",abilities:["I Do Believe!","Blink","Fairy Dust","Wrench"],lore:"Mobile and tricky. Her healing brooch lets allies donate life to her.",stats:{SPD:5,STR:"3(7)",FIN:6,"CC ATT":4,"CC DEF":5,ARM:5,LIFE:18}},
+  {name:"Albert",role:"Pragmatist Operative",pts:26,weapons:"Long Deacon D8+4 (Smoke)",abilities:["Smoke","Hang On","Aid"],lore:"Calm support operative. Creates Smoke to shield allies.",stats:{SPD:4,STR:4,FIN:4,"CC ATT":4,"CC DEF":4,ARM:6,LIFE:17}},
+  {name:"Maria Poppets",role:"Pragmatist Operative",pts:29,weapons:"Alchemantic Pistol D6+3",abilities:["Flight (×2)","Hang On","Focused Mind"],lore:"Takes to the air freely. Focused Mind lets her cast in close combat.",stats:{SPD:"4(8)",STR:3,FIN:5,"CC ATT":3,"CC DEF":5,ARM:5,LIFE:17}},
+  {name:"Pascal Du Lyon",role:"Pragmatist Operative",pts:25,weapons:"Lion Claw D8+Str (Cleave)",abilities:["Drunkard","Vicious"],lore:"Disgraced French noble. His drinking is his greatest weapon — and weakness.",stats:{SPD:4,STR:"3+",FIN:3,"CC ATT":"5+","CC DEF":4,ARM:6,LIFE:19}},
+  {name:"Dorothy",role:"Pragmatist Agent",pts:24,weapons:"Spark Pistol D6+3 (Concussion)",abilities:["Engine Linked","Keen Observer","Dimension Step"],lore:"Master of misdirection. Dimension Step lets her vanish through doorways.",stats:{SPD:5,STR:3,FIN:5,"CC ATT":3,"CC DEF":5,ARM:5,LIFE:16}},
+  {name:"The White Rabbit",role:"Ethicist Operative",pts:33,weapons:"Pocket Watch Bomb D6 (Blast, Confusion)",abilities:["Time Shift","Blink","Lurk"],lore:"Always punctual, impossible to catch. Time Shift lets allies retake failed Actions.",stats:{SPD:5,STR:3,FIN:6,"CC ATT":3,"CC DEF":6,ARM:5,LIFE:17}},
+  {name:"Bastion",role:"Pragmatist Operative",pts:32,weapons:"Shield Arm · Pistol",abilities:["Mechanical","Hunker Down","Resilient","Guard"],lore:"Immovable defensive wall. Immune to Critical Hits.",stats:{SPD:3,STR:5,FIN:3,"CC ATT":5,"CC DEF":6,ARM:11,LIFE:22}},
+  {name:"Alice Aykroyd",role:"Anarchist Operative",pts:31,weapons:"Elemental Pistol",abilities:["Alchemantic Trap","Alchemantic Bombs","Reactive Call"],lore:"Absorbs and redirects enemy Invocations. A nightmare for opposing Alchemancers.",stats:{SPD:4,STR:3,FIN:5,"CC ATT":4,"CC DEF":5,ARM:5,ALC:5,LIFE:18}},
+  {name:"Alice & Arielle",role:"Anarchist Agents",pts:28,weapons:"Pistols · Sabres",abilities:["Dimension Step","Confusion","Pinning","Blink"],lore:"Impossible to pin down. Two characters that move as one unpredictable pair.",stats:{SPD:5,STR:3,FIN:6,"CC ATT":4,"CC DEF":5,ARM:4,LIFE:"15(8)"}},
+]};
+
+// ── CHARACTERS BUILDER ────────────────────────────────────
+reg('characters',function(){
+  if(document.getElementById('panel-characters').innerHTML.trim())return;
+  const factions=[
+    {key:'dickensians',label:'🔴 Dickensians'},
+    {key:'servants',label:'🔵 Servants'},
+    {key:'scions',label:'🏺 Scions'},
+    {key:'guild',label:'🕵️ Guild'},
+  ];
+  const tabs=factions.map((f,i)=>`<button class="faction-tab${i===0?' active':''}" onclick="showFaction('${f.key}',this)">${f.label}</button>`).join('');
+  const panels=factions.map((f,i)=>`<div class="faction-panel${i===0?' active':''}" id="fp-${f.key}"><div class="char-grid">${CHARS[f.key].map(charCard).join('')}</div></div>`).join('');
+  document.getElementById('panel-characters').innerHTML=`
+<div class="section-header"><h2 class="section-title">Character Rosters</h2><p class="section-subtitle">All factions across three books</p></div>
+<div class="faction-tabs">${tabs}</div>${panels}`;
+});
+
+function showFaction(k,btn){
+  document.querySelectorAll('.faction-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.faction-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('fp-'+k).classList.add('active');
+  btn.classList.add('active');
+}
+
+function charCard(c){
+  const sk=Object.keys(c.stats).slice(0,5);
+  return`<div class="char-card" onclick='openChar(${JSON.stringify(c.name)})'>
+    <div class="char-header">
+      <div><div class="char-name">${c.name}</div><div class="char-role">${c.role}</div></div>
+      <div><div class="char-pts">${c.pts}</div><div class="char-pts-lbl">pts</div></div>
+    </div>
+    <div class="char-stats">
+      ${sk.map(k=>`<div class="stat-cell"><span class="stat-lbl">${k}</span><span class="stat-val">${c.stats[k]}</span></div>`).join('')}
+    </div>
+    <div class="char-abilities">
+      ${c.abilities.map(a=>`<span class="ability-tag">${a}</span>`).join('')}
+      ${(c.schools||[]).map(s=>`<span class="ability-tag alc">⚗ ${s}</span>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ── ABILITIES DATA ────────────────────────────────────────
+const ABILITIES=[
+  {n:"Aid",t:"Action",d:"Assist an ally — card-specific effect. Spend an Action to use."},
+  {n:"Aim",t:"Ranged",d:"If no Move Action taken before shooting, +2 Ranged Attack. Cannot combine with Dual Fire."},
+  {n:"Alchemantic Bombs",t:"Alchemancy",d:"Throw elemental grenades with unique effects. One per turn. Follow standard grenade rules."},
+  {n:"Alchemantic Trap",t:"Alchemancy",d:"Free Action when a visible Invocation is called nearby. Alchemancy check (Diff 5+Power+Essences) to absorb and nullify it."},
+  {n:"Ammunition",t:"Ranged",d:"Spend an Action to swap ammunition type before firing. Different ammo has different effects."},
+  {n:"Ammo Carrier",t:"Support",d:"Adjacent character may swap ammunition during a Ranged Attack without spending their own Action."},
+  {n:"Amorphous",t:"Movement",d:"Ignore terrain ≤1\" high. No Difficult Terrain penalty. Climb at full Speed. Cannot be flanked or rear-attacked."},
+  {n:"Assault",t:"Combat",d:"Charging bonus increased to +2 Attack, +2 Damage instead of +1/+1."},
+  {n:"Aura of Death",t:"Passive",d:"Enemies within 2\" suffer −1 to all characteristics."},
+  {n:"Awareness",t:"Passive",d:"Cannot be flanked. Opponents get no bonus from rear arc attacks. Can still be Outnumbered."},
+  {n:"Avatar",t:"Special",d:"Loses 1 chosen characteristic each time a non-Insignificant ally is OOA. +2 extra per 25% company loss."},
+  {n:"Backstab",t:"Combat",d:"+2 to CC Attack when attacking from the rear arc."},
+  {n:"Berserk",t:"Combat",d:"Must charge nearest visible enemy; all Actions must be Move or CC Attack."},
+  {n:"Blink",t:"Movement",d:"Free Move up to Speed in any direction, teleporting through terrain. Counts as free Disengage."},
+  {n:"Bleed",t:"Weapon",d:"Successful hit causes D4 Life loss each Maintenance Phase. Clear with Diff 12 Finesse in Maintenance."},
+  {n:"Bow Out",t:"Combat",d:"Spend an Action to disengage without a Finesse check. Cannot Charge same foe this turn."},
+  {n:"Bring 'em Down",t:"Combat",d:"Charge hit causing damage: target makes Finesse check (Diff 10+damage) or goes Prone."},
+  {n:"Burning",t:"Weapon",d:"All damage ignores Armour completely."},
+  {n:"By Engine's Will",t:"Special",d:"Once per turn, force an opponent to re-roll any single die."},
+  {n:"Canopic Jar",t:"Special",d:"At start of Activation (not an Action): draw from Canopic Deck, make Access check. Success = characteristic bonuses and abilities from that spirit."},
+  {n:"Catch",t:"Combat",d:"Pull a target within 2\" into base contact as an Action. Engages them in CC."},
+  {n:"Challenge",t:"Combat",d:"Nominate a target as an Action. Until end of turn, that character is −2 to all characteristics when not attacking the challenger."},
+  {n:"Clamber",t:"Movement",d:"+2 to Climb/Jump checks. Climb at full Speed. Re-roll Climb/Jump/Fall checks."},
+  {n:"Cleave",t:"Combat",d:"Beat Defence by 5+ or score Critical: D6 roll reduces a target characteristic permanently."},
+  {n:"Concussion",t:"Weapon",d:"Automatically Stuns target if any damage is caused. No check required."},
+  {n:"Confusion",t:"Weapon",d:"Damage caused: target makes Diff 13 Finesse or moves D4\" randomly."},
+  {n:"Consolidation",t:"Movement",d:"At end of Activation, make a card-specified move that must end closer to an ally."},
+  {n:"Cowl Form",t:"Special",d:"Transform between two different stat profiles."},
+  {n:"Crushing",t:"Weapon",d:"Spend extra Action with attack for D4 additional damage bypassing Armour."},
+  {n:"Determined",t:"Combat",d:"When an ally is taken OOA, make an immediate free CC Attack against any foe in base contact."},
+  {n:"Dimension Step",t:"Movement",d:"Enter any door or window and emerge from a similar portal within range. Card specifies range and uses."},
+  {n:"Disturbing",t:"Passive",d:"Enemy engaging you in CC makes Opposed Life Check or suffers −2 CC Attack that round. Checked every round."},
+  {n:"Diving Attack",t:"Combat",d:"CC attack from Flight with special modifiers (+2 Attack, +2 Damage typically)."},
+  {n:"Drag",t:"Combat",d:"On CC hit, Opposed Strength check — win = pull target up to half Speed in any direction."},
+  {n:"Drain",t:"Weapon",d:"Sucks Life and/or Essences from target. Cannot be reduced by Armour."},
+  {n:"Drunkard",t:"Special",d:"May drink at Activation start (free). Roll D6+drink levels for increasing stat bonuses. Max levels = pass out, lose Actions, reset bonuses."},
+  {n:"Dual Fire",t:"Ranged",d:"Fire two Ranged Attacks at different targets as one Action. −2 to both rolls. Cannot combine with Aim."},
+  {n:"Elementalist",t:"Alchemancy",d:"Swap certain Elemental Essences for different types when casting Invocations."},
+  {n:"Engine Linked",t:"Special",d:"When Tempting Fate, draw a second Eye card after seeing the first. Must take the second card."},
+  {n:"Entangle",t:"Combat",d:"Target cannot move until passing a Strength check. −2 CC Attack and Defence while entangled."},
+  {n:"Ethereal",t:"Weapon",d:"Can harm Insubstantial characters normally."},
+  {n:"Expendable",t:"Special",d:"May absorb damage meant for a specific ally. Must declare before damage rolls. Must be in base contact."},
+  {n:"Fairy Dust",t:"Special",d:"As an Action, throw dust up to 6\" granting target the Flit ability for one turn."},
+  {n:"Faulty",t:"Passive",d:"On any D20 roll of 1, character seizes up and Activation ends immediately."},
+  {n:"Flight",t:"Movement",d:"Spend 2 Actions to move over terrain and characters. Speed × bracket value. Cannot end mid-air."},
+  {n:"Flit",t:"Movement",d:"Spend 1 Action to move up to Speed ignoring terrain and characters. Must land at end."},
+  {n:"Focused Mind",t:"Alchemancy",d:"Call Invocations while in Close Combat without the usual penalty. Costs 1 extra Essence."},
+  {n:"Furious Charge",t:"Combat",d:"Charge bonus increased to +2 CC Attack, +1 Damage."},
+  {n:"Glide",t:"Movement",d:"Move through terrain without the Insubstantial requirement to clear it in one move."},
+  {n:"Grab",t:"Combat",d:"Under conditions: target −2 CC, cannot Disengage. Break free via Opposed Strength (Action)."},
+  {n:"Guard",t:"Passive",d:"Cannot be flanked or Outnumbered. Rear attack still grants +1 first round only."},
+  {n:"Hang On",t:"Movement",d:"Attach to a flying/leaping ally and travel with them. Also prevents Bow Out/Retreat/Shifty to escape CC."},
+  {n:"Hard Target",t:"Passive",d:"+1 Ranged Defence when this character has moved this turn."},
+  {n:"Heavy Hit",t:"Weapon",d:"On hit: target moved 1\" away. 10+ total damage in one Activation also makes target Prone."},
+  {n:"Hunker Down",t:"Combat",d:"As an Action: +3 Armour until your next Activation."},
+  {n:"Hunter's Instinct",t:"Ranged",d:"When enemy comes into Line of Sight: immediate Ranged Attack (−2). Counts as one Activation Action."},
+  {n:"I Do Believe!",t:"Special",d:"Any character within 6\" spends an Action + Finesse check to heal Tinker Belle D4+1 Life (donor takes 1 wound)."},
+  {n:"Impetuous",t:"Combat",d:"When an ally is taken OOA: free CC Attack against any foe in base contact with the fallen ally."},
+  {n:"Inconspicuous",t:"Passive",d:"Cannot be targeted by Ranged Attacks unless within 6\" or the only visible target."},
+  {n:"Insignificant",t:"Passive",d:"Does not count towards Outnumbering or Flanking. Does not cause Avatar characteristic loss when OOA."},
+  {n:"Insubstantial",t:"Passive",d:"No Wounded state — fights at full effectiveness until OOA. Can move through terrain in one Move Action."},
+  {n:"Keen Observer",t:"Special",d:"Spend an Action to look at one face-down opponent card (Activation or Eye, not Tarot)."},
+  {n:"Knockback",t:"Combat",d:"On any CC hit causing damage: target moved 1\" away."},
+  {n:"Lamplight",t:"Special",d:"All friendly characters within 6\" gain +1 Ranged Attack against targets in the illuminated area."},
+  {n:"Latch On",t:"Combat",d:"CC hit causing damage: attacker latches on. Target −2 Speed and −2 Finesse. Break free via Opposed Strength."},
+  {n:"Lecture",t:"Special",d:"Action at 6\" range. Diff 12 Finesse check: fail = target loses all remaining Actions (can only Move)."},
+  {n:"Light Trigger",t:"Ranged",d:"Free Ranged Attack during a Run or Jump at −4. Cannot combine with Dual Fire or into CC."},
+  {n:"Linked Finesse",t:"Passive",d:"Two linked characters use combined Finesse for shared checks and certain abilities."},
+  {n:"Lucky",t:"Passive",d:"Failed roll missing by 5 or less: immediately re-roll (must take second result)."},
+  {n:"Lumber",t:"Movement",d:"When Charging: knock aside characters in path. They make Finesse check or are moved 1\" aside."},
+  {n:"Lurk",t:"Special",d:"Action; hide within 1\" of terrain. Cannot be targeted beyond 3\". Lasts until any non-Lurk Action."},
+  {n:"Mechanical",t:"Passive",d:"Immune to Bleed, Venom, Poison, and Disease effects."},
+  {n:"Multi Fire",t:"Ranged",d:"Fire two Ranged Attacks as one Action at same or different targets. −2 to both rolls. Weapon treated as Slow."},
+  {n:"Multi Strike",t:"Combat",d:"Make two CC attacks in one CC round, each with a different weapon if available."},
+  {n:"Murderous",t:"Combat",d:"+2 to CC damage against targets already in the Wounded state."},
+  {n:"Nimble",t:"Combat",d:"Re-roll Finesse checks to avoid template effects. Must take second result unless holding Favour."},
+  {n:"Oooo — Ladies!",t:"Special",d:"Suffers −2 to CC Attack and Defence against female characters. Must pass Finesse check to attack them."},
+  {n:"Opportunity Fire",t:"Ranged",d:"Make Ranged Attacks in any direction without spending a Move to turn."},
+  {n:"Organised",t:"Special",d:"During Sorting Phase: rearrange your Activation Deck in any order after seeing the top card."},
+  {n:"Overseer",t:"Special",d:"Issue orders to specific character types. 1 Action = 1 character; 2 Actions = all of that type."},
+  {n:"Pack Hunter",t:"Combat",d:"+1 CC Attack for each friendly character of the same type in base contact with the target."},
+  {n:"Pain",t:"Weapon",d:"On hit with any damage: target Finesse check (Diff 7+damage) or Stunned."},
+  {n:"Penetrating",t:"Weapon",d:"Halve the target's Armour when calculating damage."},
+  {n:"Pickpocket",t:"Special",d:"Base contact + Opposed Finesse: win = steal one item from opponent character."},
+  {n:"Piercing",t:"Weapon",d:"Natural 20 on attack ignores all of target's Armour."},
+  {n:"Pinning",t:"Weapon",d:"Hit causing damage: Finesse check (Diff 5+damage) or target pinned to terrain. Pinned = cannot move/turn."},
+  {n:"Ramshackle",t:"Weapon",d:"On any attack roll of 1: weapon breaks/jams. Requires an Action to repair."},
+  {n:"Razor Sharp",t:"Weapon",d:"Critical Hit on a D20 roll of 19 OR 20."},
+  {n:"Reach",t:"Combat",d:"Make CC attacks from behind an ally already in CC. Must be in base contact with that ally."},
+  {n:"Reaction",t:"Special",d:"Triggered response to a specific event. Must be declared immediately when trigger occurs."},
+  {n:"Rear Defence",t:"Passive",d:"+2 to CC and Ranged Defence against attacks from the rear arc."},
+  {n:"Reactive Call",t:"Alchemancy",d:"Reserve an Action to call an Invocation later, even during opponent's Activation. Failed calls lose full Essences."},
+  {n:"Regenerate",t:"Passive",d:"Maintenance Phase: D6 roll heals 0/0/1/1/2/3 Life. If OOA: roll 6 next Maintenance to return Prone."},
+  {n:"Rend",t:"Combat",d:"CC hit causing damage: target permanently loses 1 Armour for the rest of the game."},
+  {n:"Resilient",t:"Passive",d:"Immune to Critical Hits — treated as normal attacks."},
+  {n:"Resist Element",t:"Passive",d:"Reduced damage from a specific Element plus bonus to Breaking checks for that school."},
+  {n:"Retreat",t:"Movement",d:"Move Action directly away from enemy without Disengage check. Cannot Charge same foe this turn."},
+  {n:"Scope",t:"Ranged",d:"2 Actions on one shot: reduce all range penalties by 2 points."},
+  {n:"Scout",t:"Ranged",d:"May fire a Ranged weapon at any point during a Move Action."},
+  {n:"Seeker Snakes",t:"Special",d:"Snakes automatically hit unless target passes a Finesse check."},
+  {n:"Servant of Engine",t:"Special",d:"Once per turn: re-roll any die relating to Engine or Favour interactions."},
+  {n:"Shatter",t:"Combat",d:"CC hit causing damage: target's Armour reduced by D4 permanently."},
+  {n:"Shifty",t:"Movement",d:"Once per Activation: free 1\" move without triggering Threatened Area reactions."},
+  {n:"Sicken",t:"Weapon",d:"On hit: Finesse or Strength check (Diff 10+damage). Fail = −1 to all characteristics until own next Activation."},
+  {n:"Slow",t:"Weapon",d:"Cannot fire this weapon again this Activation."},
+  {n:"Smoke",t:"Special",d:"Generate a Smoke template blocking all Line of Sight. Clears next Maintenance Phase."},
+  {n:"Snap Shot",t:"Ranged",d:"Make a Ranged Attack at end of any Charge Move at −2 penalty."},
+  {n:"Sniper",t:"Ranged",d:"Cover from intervening characters doesn't apply. Terrain cover still applies."},
+  {n:"Spotter",t:"Special",d:"Provide Line of Sight for another character's Ranged Attack. LOS measured from Spotter."},
+  {n:"Spring Attack",t:"Combat",d:"Reserve an Action. When enemy enters Speed range: free Move into CC + one CC round. May then Retreat free."},
+  {n:"Stand and Deliver",t:"Ranged",d:"When charged from front arc: free Ranged Attack at −2 (not an Action)."},
+  {n:"Stand Firm",t:"Passive",d:"Strength check (Diff = damage) to resist knockback effects."},
+  {n:"Stealthy",t:"Passive",d:"Only Move Actions taken + starts/ends in cover: cannot be targeted beyond Short range. Cover bonus +4 instead of +2."},
+  {n:"Stern",t:"Passive",d:"When taking damage: D20 roll may reduce or ignore damage entirely (card-specific)."},
+  {n:"Stop It You Naughty Boy",t:"Special",d:"Action at 6\". Opposed Finesse: win = target loses all remaining Actions this Activation."},
+  {n:"Stun",t:"Weapon",d:"Hit causing damage: target Finesse check (Diff 10+damage) or Stunned."},
+  {n:"Supernatural Speed",t:"Movement",d:"Burst speed triggered under card-specific conditions. Grants an extra Move Action instantly."},
+  {n:"Sure Footed",t:"Movement",d:"+4 to Finesse for Climbing, Jumping, and Falling. May also re-roll these checks."},
+  {n:"Sweep",t:"Combat",d:"Attack all characters in base contact simultaneously. Single roll; resolved separately. −3 damage per target beyond first."},
+  {n:"Swift",t:"Weapon",d:"Gain a second CC attack on Charge immediately after the first at −4."},
+  {n:"Swift Step",t:"Movement",d:"Free 2\" move after a CC round for attacker or defender."},
+  {n:"Terror",t:"Special",d:"Take enemy OOA: all enemies with LOS make Opposed Life Check or move full Speed away immediately."},
+  {n:"Threaten",t:"Special",d:"Action; all enemies within 4\" make Diff 12 Life check. Fail = −2 CC Attack until Maintenance."},
+  {n:"Thrust",t:"Weapon",d:"+2 Damage on Charge. Can pass through target if mounted or behind."},
+  {n:"Thundering Charge",t:"Combat",d:"This character's Charges apply Outnumbered penalty regardless of how many other attackers."},
+  {n:"Time Shift",t:"Special",d:"Any character within 6\" may retake one Action after it's been taken. All original effects cancelled."},
+  {n:"Timestop",t:"Special",d:"Action; target within 6\" cannot take Actions until Maintenance Phase."},
+  {n:"Tornado",t:"Weapon",d:"Blast attack. Fully covered: Diff 15 Finesse or D4 damage + D6\" random move + Prone."},
+  {n:"Tough",t:"Passive",d:"Reduce incoming damage by D4 per attack (minimum 0)."},
+  {n:"Transform",t:"Special",d:"Switch between two distinct stat profiles as an Action or when triggered by Unstable."},
+  {n:"Unthinking",t:"Passive",d:"Cannot use Alchemancy. Cannot interact with objects. Acts purely on instinct."},
+  {n:"Unstable",t:"Passive",d:"Each Maintenance Phase: D6 roll may trigger Transform or change characteristics."},
+  {n:"Venom",t:"Weapon",d:"Successful hit: D4 Life loss each Maintenance until target passes Diff 12 Finesse."},
+  {n:"Vicious",t:"Combat",d:"When you bring enemy to Wounded state in CC: gain one immediate additional CC Attack."},
+  {n:"Voodoo",t:"Special",d:"Action; link to enemy within 6\". Half damage Voodoo character takes is also suffered by linked target."},
+  {n:"Wallop",t:"Weapon",d:"CC hit causing damage: target makes Diff 12 Finesse or knocked Prone."},
+  {n:"Wands",t:"Weapon",d:"Limited-use Alchemantic weapons (typically 6 total). Each shot has different elemental effects."},
+  {n:"Wheeled",t:"Movement",d:"Extra Speed on flat ground. Movement penalties on steps and in Difficult Terrain."},
+  {n:"Wrench",t:"Special",d:"Gives Strength 7 for physical checks. Twice per game: Strength 7 CC attacks."},
+];
+
+// ── ABILITIES BUILDER ─────────────────────────────────────
+reg('abilities',function(){
+  if(document.getElementById('panel-abilities').innerHTML.trim())return;
+  const types=['All',...new Set(ABILITIES.map(a=>a.t))];
+  const entries=ABILITIES.map(a=>`<div class="glo-entry" data-name="${a.n.toLowerCase()}" data-type="${a.t}" onclick="this.classList.toggle('expanded')">
+    <div class="glo-head"><span class="glo-name">${a.n}</span><span class="glo-type">${a.t}</span></div>
+    <div class="glo-desc">${a.d}</div>
+  </div>`).join('');
+  document.getElementById('panel-abilities').innerHTML=`
+<div class="section-header"><h2 class="section-title">Abilities Glossary</h2><p class="section-subtitle">Every special ability — click any entry to expand</p></div>
+<input class="glo-search" placeholder="Search abilities…" oninput="filterAbil(this.value)">
+<div class="filter-pills">${types.map((t,i)=>`<button class="filter-pill${i===0?' active':''}" onclick="filterType('${t}',this)">${t}</button>`).join('')}</div>
+<div id="glo-list">${entries}</div>`;
+});
+function filterAbil(v){const lv=v.toLowerCase();document.querySelectorAll('.glo-entry').forEach(e=>e.classList.toggle('hidden',!e.dataset.name.includes(lv)));}
+function filterType(t,btn){
+  document.querySelectorAll('.filter-pill').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  document.querySelectorAll('.glo-entry').forEach(e=>e.classList.toggle('hidden',t!=='All'&&e.dataset.type!==t));
+}
+
+function openChar(name){
+  const c=Object.values(CHARS).flat().find(x=>x.name===name);
+  if(!c)return;
+  const statKeys=['SPD','STR','FIN','CC ATT','CC DEF','RNG ATT','RNG DEF','ARM','ALC','LIFE'];
+  const stats=statKeys.filter(k=>c.stats[k]!==undefined);
+  document.getElementById('m-name').textContent=c.name;
+  document.getElementById('m-sub').textContent=`${c.role} · ${c.pts} pts`;
+  document.getElementById('m-body').innerHTML=`
+    <div class="modal-stats">
+      ${stats.map(k=>`<div class="ms"><span class="ms-lbl">${k}</span><span class="ms-val">${c.stats[k]}</span></div>`).join('')}
+    </div>
+    ${c.lore?`<div class="highlight-box" style="margin-bottom:1rem;font-style:italic">${c.lore}</div>`:''}
+    ${c.schools?`<div class="modal-section"><div class="modal-section-title">⚗ Schools</div><div>${c.schools.map(s=>`<span class="stat-pill">${s}</span>`).join('')}</div></div>`:''}
+    ${c.weapons?`<div class="modal-section"><div class="modal-section-title">⚔ Weapons</div><div class="weapon-entry"><div class="weapon-stats">${c.weapons}</div></div></div>`:''}
+    <div class="modal-section"><div class="modal-section-title">⚡ Abilities</div>
+      ${c.abilities.map(a=>`<div class="ability-entry" onclick="this.classList.toggle('expanded')">
+        <div class="ability-ename">${a}</div>
+        <div class="ability-edesc">${abilityDesc(a)}</div>
+      </div>`).join('')}
+    </div>`;
+  document.getElementById('char-modal').classList.add('open');
+}
+
+// ── INVOCATIONS DATA ──────────────────────────────────────
+const INVOC={
+fire:[
+  {n:"Enhance",pw:1,ac:1,rng:"Touch",df:8,el:"1 Fire",dur:"3 turns",d:"Grant +2 to one characteristic of a target ally. Any stat except Life."},
+  {n:"Fire Brand",pw:1,ac:1,rng:'6"',df:10,el:"1 Fire",dur:"Instant",d:"D6+2 Fire damage with Burning. Target continues losing Life each turn until passing Finesse check."},
+  {n:"Forge Heat",pw:1,ac:1,rng:"Touch",df:9,el:"1 Fire",dur:"3 turns",d:"Grant a weapon the Burning property — damage ignores Armour for the duration."},
+  {n:"Singe",pw:1,ac:1,rng:'8"',df:10,el:"1 Fire",dur:"1 turn",d:"D4 Fire damage and −1 to all characteristics this turn. Great for weakening heavily-armoured targets."},
+  {n:"Enliven",pw:2,ac:1,rng:'6"',df:12,el:"2 Fire",dur:"2 turns",d:"+3 Speed and +2 CC Attack to an ally. Turn a defensive character into an aggressive threat."},
+  {n:"Fire Burst",pw:2,ac:1,rng:'10"',df:12,el:"2 Fire",dur:"Instant",d:'2" Blast, D8+4 Fire damage with Burning. Area denial that sets everything on fire.'},
+  {n:"Wrath of Fire",pw:2,ac:1,rng:'12"',df:13,el:"2 Fire",dur:"Instant",d:"D10+6 Fire damage ignoring Armour completely. Single-target devastation against armoured foes."},
+  {n:"Bolster",pw:3,ac:1,rng:'8"',df:14,el:"3 Fire",dur:"3 turns",d:"+4 Strength, +2 CC Attack, +2 Armour to an ally. Temporary powerhouse transformation."},
+  {n:"Rage",pw:3,ac:1,rng:"Touch",df:14,el:"3 Fire",dur:"2 turns",d:"Target becomes Berserk with +4 to all combat characteristics. They must charge the nearest enemy."},
+  {n:"Elemental Explosion",pw:4,ac:2,rng:'14"',df:16,el:"4 Fire",dur:"Instant",d:'4" Blast, D12+8 Fire damage ignoring all Armour. Most destructive single invocation in the game.'},
+],
+earth:[
+  {n:"Elemental Possession",pw:1,ac:1,rng:'8"',df:10,el:"1 Earth",dur:"2 turns",d:'Control an inanimate object, moving it up to 4". Use terrain as weapon or shield.'},
+  {n:"Instant Imp",pw:1,ac:1,rng:"—",df:10,el:"1 Earth",dur:"3 turns",d:"Summon an Imp (Spd4, Str2, Fin3, CC2/2, Arm0, Life5) to harass enemies or complete objectives."},
+  {n:"Quagmire",pw:1,ac:1,rng:'10"',df:10,el:"1 Earth",dur:"2 turns",d:'Create a 3" radius of Difficult Terrain. Force enemies to slow down.'},
+  {n:"Stone Sheath",pw:1,ac:1,rng:"Touch",df:9,el:"1 Earth",dur:"3 turns",d:"+3 Armour to target. Significant defensive boost stacking with natural Armour."},
+  {n:"Earth Bound",pw:2,ac:1,rng:'8"',df:12,el:"2 Earth",dur:"2 turns",d:"Target character cannot move at all. Perfect setup for concentrated fire."},
+  {n:"Energy Drain",pw:2,ac:1,rng:'8"',df:13,el:"2 Earth",dur:"2 turns",d:"Drain D4 Essences from a target Alchemancer. Cripple enemy spellcasters."},
+  {n:"Desiccate",pw:2,ac:1,rng:'10"',df:13,el:"2 Earth",dur:"1 turn",d:"D8+2 damage and −2 to all characteristics. Punishing damage+debuff combination."},
+  {n:"Death's Door",pw:3,ac:1,rng:'8"',df:14,el:"3 Earth",dur:"2 turns",d:"Target makes Life check each turn or take D4 damage. Creeping doom for those who don't break free."},
+  {n:"Elemental Spirit",pw:3,ac:2,rng:"—",df:15,el:"3 Earth",dur:"4 turns",d:"Summon Earth Elemental (Spd3, Str8, Fin2, CC6/4, Arm12, Life25) to fight for you."},
+  {n:"Bone Wrack",pw:4,ac:2,rng:'12"',df:16,el:"4 Earth",dur:"Instant",d:"D12+6 damage and target immediately enters Wounded state regardless of current Life."},
+],
+air:[
+  {n:"Air Step",pw:1,ac:1,rng:"Touch",df:8,el:"1 Air",dur:"2 turns",d:"+3 Speed and ignore Difficult Terrain. Give a slow character surprising mobility."},
+  {n:"Conduit",pw:1,ac:1,rng:"Touch",df:9,el:"1 Air",dur:"Permanent",d:"Transfer Essences between Alchemancers. Share resources across your company."},
+  {n:"Deflect",pw:1,ac:1,rng:"Touch",df:9,el:"1 Air",dur:"2 turns",d:"+3 Ranged Defence. Make a character much harder to shoot."},
+  {n:"Float",pw:1,ac:1,rng:"Touch",df:8,el:"1 Air",dur:"3 turns",d:"+2 Speed and ignore all falling damage."},
+  {n:"Elegant Movement",pw:2,ac:1,rng:"Touch",df:12,el:"2 Air",dur:"2 turns",d:"+4 Finesse and ignore Threatened Area movement penalties."},
+  {n:"Force Shield",pw:2,ac:1,rng:'6"',df:12,el:"2 Air",dur:"3 turns",d:"+5 Ranged Defence and +3 CC Defence to target ally. The ultimate defensive buff."},
+  {n:"Windwalker",pw:2,ac:1,rng:"Touch",df:12,el:"2 Air",dur:"2 turns",d:"Target may Fly at 2× Speed for two crucial turns."},
+  {n:"Mist Move",pw:3,ac:1,rng:"Touch",df:14,el:"3 Air",dur:"1 turn",d:'Target teleports up to 12" and cannot be targeted for the rest of the turn.'},
+  {n:"Wall of Air",pw:3,ac:2,rng:'10"',df:14,el:"3 Air",dur:"3 turns",d:'6" wall blocking all movement and ranged attacks. Split the battlefield in two.'},
+  {n:"Cyclone",pw:4,ac:2,rng:'12"',df:16,el:"4 Air",dur:"Instant",d:'3" Blast. All targets moved D6" randomly and −4 to all characteristics for 1 turn.'},
+],
+water:[
+  {n:"Assuage",pw:1,ac:1,rng:"Touch",df:8,el:"1 Water",dur:"Instant",d:"Heal D4+1 Life. Basic healing for minor wounds."},
+  {n:"Confuse",pw:1,ac:1,rng:'8"',df:10,el:"1 Water",dur:"1 turn",d:"Target suffers −4 to both Ranged and CC Attack. Cripple any fighter for a turn."},
+  {n:"Salve",pw:1,ac:1,rng:"Touch",df:8,el:"1 Water",dur:"Instant",d:"Remove Stunned, Prone, or Wounded effects from target."},
+  {n:"Weaken",pw:1,ac:1,rng:'8"',df:10,el:"1 Water",dur:"1 turn",d:"Target treated as Wounded (−2 to all stats except Armour)."},
+  {n:"Atrophy",pw:2,ac:1,rng:'8"',df:12,el:"2 Water",dur:"3 turns",d:"−3 Speed and −2 Strength. Slow and weaken an aggressive enemy over multiple turns."},
+  {n:"Rejuvenate",pw:2,ac:1,rng:'6"',df:12,el:"2 Water",dur:"Instant",d:"Heal D8+2 Life. Substantial healing to keep a key character fighting."},
+  {n:"Transposition",pw:2,ac:2,rng:'10"',df:13,el:"2 Water",dur:"Instant",d:"Swap positions of two characters. Rescue an ally or drop an enemy into danger."},
+  {n:"Confound",pw:3,ac:1,rng:'8"',df:14,el:"3 Water",dur:"2 turns",d:"Target acts randomly and cannot use abilities. Ultimate disruption against key enemies."},
+  {n:"Iron Manacles",pw:3,ac:1,rng:'10"',df:14,el:"3 Water",dur:"Until broken",d:"Target immobilised and −4 CC Defence until breaking check is passed."},
+  {n:"Revivify",pw:4,ac:2,rng:"Touch",df:17,el:"4 Water",dur:"Instant",d:"Return an Out of Action character with D6 Life. Most powerful healing in the game."},
+]};
+
+// ── ALCHEMANCY BUILDER ────────────────────────────────────
+reg('alchemancy',function(){
+  if(document.getElementById('panel-alchemancy').innerHTML.trim())return;
+  const schoolDefs=[
+    {k:'fire',icon:'🔥',name:'Fire',theme:'Destruction & Enhancement',cls:'sc-fire'},
+    {k:'earth',icon:'🌿',name:'Earth',theme:'Life, Death & Summoning',cls:'sc-earth'},
+    {k:'air',icon:'💨',name:'Air',theme:'Protection & Movement',cls:'sc-air'},
+    {k:'water',icon:'💧',name:'Water',theme:'Healing & Weakening',cls:'sc-water'},
+  ];
+  // Essence tracker
+  const essRows=['fire','earth','air','water'].map((el,i)=>{
+    const icons=['🔥','🌿','💨','💧'],labels=['Fire','Earth','Air','Water'];
+    return`<div class="ess-row">
+      <span class="ess-lbl">${icons[i]} ${labels[i]}</span>
+      <div class="ess-pips" id="ep-${el}">${Array(6).fill(0).map((_,j)=>`<div class="pip pip-${el} full" onclick="togglePip('${el}',${j},this)"></div>`).join('')}</div>
+      <button onclick="refillEl('${el}')" style="background:transparent;border:1px solid rgba(201,168,76,.2);color:var(--brass-dark);font-size:.67rem;padding:.18rem .45rem;border-radius:3px;cursor:pointer;font-family:'Josefin Sans',sans-serif">Refill</button>
+    </div>`;
+  }).join('');
+  const schoolTabs=schoolDefs.map((s,i)=>`<div class="school-card ${s.cls}${i===0?' active':''}" onclick="showSchool('${s.k}',this)">
+    <span class="sc-icon">${s.icon}</span><div class="sc-name">${s.name}</div><div class="sc-theme">${s.theme}</div>
+    <div style="font-family:'Josefin Sans',sans-serif;font-size:.6rem;color:var(--parchment-dark);opacity:.7;margin-top:.3rem">${INVOC[s.k].length} invocations</div>
+  </div>`).join('');
+  const lists=schoolDefs.map((s,i)=>`<div class="invoc-list${i===0?' active':''}" id="il-${s.k}">
+    <h3 style="font-family:'Cinzel',serif;font-size:1.05rem;color:var(--brass-light);margin-bottom:1rem">${s.icon} ${s.name} School</h3>
+    ${INVOC[s.k].map(v=>`<div class="invoc-card" onclick="this.classList.toggle('expanded')">
+      <div><div class="invoc-name">${v.n}</div><div class="invoc-desc">${v.d}</div></div>
+      <div class="invoc-badges">
+        <span class="ib ib-power">Power ${v.pw}</span>
+        <span class="ib ib-action">${v.ac} Action${v.ac>1?'s':''}</span>
+        <span class="ib ib-range">📍 ${v.rng}</span>
+        <span class="ib ib-diff">Diff ${v.df}</span>
+        <span class="ib ib-elem">⚗ ${v.el}</span>
+      </div>
+    </div>`).join('')}
+  </div>`).join('');
+  document.getElementById('panel-alchemancy').innerHTML=`
+<div class="section-header"><h2 class="section-title">Alchemancy</h2><p class="section-subtitle">The four elemental schools — 40 invocations total</p></div>
+<div class="ess-tracker"><div style="font-family:'Cinzel',serif;font-size:.88rem;color:var(--brass-light);margin-bottom:.9rem">⚗ Essence Tracker — click pips to spend, Refill to recover</div>${essRows}</div>
+<div class="schools-grid">${schoolTabs}</div>${lists}`;
+});
+function showSchool(k,el){
+  document.querySelectorAll('.school-card').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.invoc-list').forEach(l=>l.classList.remove('active'));
+  el.classList.add('active');document.getElementById('il-'+k).classList.add('active');
+}
+function togglePip(el,idx,pip){
+  const pips=[...document.querySelectorAll(`#ep-${el} .pip`)];
+  const filled=pips.filter(p=>p.classList.contains('full')).length;
+  if(pip.classList.contains('full'))pips.forEach((p,i)=>{if(i>=idx)p.classList.remove('full');});
+  else pips.forEach((p,i)=>{if(i<=idx)p.classList.add('full');});
+}
+function refillEl(el){document.querySelectorAll(`#ep-${el} .pip`).forEach(p=>p.classList.add('full'));}
+
+function abilityDesc(name){
+  const a=ABILITIES.find(x=>x.n===name||name.startsWith(x.n));
+  return a?a.d:'Click to see description — check the Abilities tab for full details.';
+}
+
+function showRule(k,btn){
+  document.querySelectorAll('.rules-page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.rules-nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('rp-'+k).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── CANOPIC DATA ──────────────────────────────────────────
+const SPIRITS=[
+  {n:"Pawura",title:"Chief of the Archers",acc:12,accSt:"Finesse",dom:10,domSt:"Finesse",bonus:"+1 Speed, +3 Ranged Attack",abil:"Snap Shot, Opportunity Fire, Bow Out",quirk:"Arrogance: Must attack the furthest valid target. Cannot accept ally aid.",dominated:"Host may not receive aid from any ally."},
+  {n:"Nebetah",title:"Priestess of Set",acc:13,accSt:"Finesse",dom:11,domSt:"Finesse",bonus:"+1 Speed, +1 CC Attack, +2 Alchemancy",abil:"Pain (CC), Murderous, Voodoo",quirk:"Sadistic: May not disengage from Close Combat.",dominated:"Host must move to engage nearest foe; all Actions must be Move or CC Attack."},
+  {n:"Menwi",title:"Handmaiden",acc:12,accSt:"Finesse",dom:8,domSt:"Finesse",bonus:"+1 Finesse, +1 Ranged Defence, +1 CC Defence",abil:"Bow Out, Retreat, Backstab",quirk:"Cunning: Will not engage in CC willingly; always attempts to flank.",dominated:"Character will always disengage from CC and move to flanking position."},
+  {n:"Ibiaw",title:"Master of Armour",acc:11,accSt:"Strength",dom:9,domSt:"Strength",bonus:"+1 CC Defence, +2 Armour",abil:"Tough, Rear Defence, Awareness",quirk:"Loyal: May not leave CC if allies are still engaged anywhere.",dominated:"Must immediately move to assist any ally in Close Combat."},
+  {n:"Qenna",title:"Moneylender",acc:12,accSt:"Finesse",dom:8,domSt:"Finesse",bonus:"+1 Speed, +1 Finesse, +1 Ranged Attack",abil:"Dead Eye, Lurk, Shifty",quirk:"Avaricious: Must move towards any objective or loot marker when possible.",dominated:"Host must move towards and attempt to pocket the highest-value model."},
+  {n:"Djau",title:"Bodyguard",acc:12,accSt:"Strength",dom:8,domSt:"Strength",bonus:"+2 CC Defence, +2 CC Attack, −1 Ranged Attack",abil:"Precision (CC), Determined, Guard",quirk:"Duty-bound: Will not attack a foe who hasn't first attacked an accessible character.",dominated:"May not assault or flank; must respond to attacks on others."},
+  {n:"Tiaa",title:"Cat of the Court",acc:10,accSt:"Finesse",dom:6,domSt:"Finesse",bonus:"+1 Speed, +1 Finesse",abil:"Nimble, Lurk",quirk:"Agile: Always passes falling checks and may always elect to land nimbly.",dominated:"Host immediately seeks highest rooftop or elevated terrain available."},
+  {n:"Manetho",title:"Slave Master",acc:10,accSt:"Strength",dom:8,domSt:"Strength",bonus:"+1 Strength, +2 CC Attack, −1 Finesse",abil:"Pain (CC), Disturbing",quirk:"Cruel: If possible to attack a weakened foe, must do so.",dominated:"Host must always attack the most weakened visible enemy."},
+  {n:"Seneb",title:"Spearman",acc:11,accSt:"Strength",dom:7,domSt:"Strength",bonus:"+1 Speed, +1 CC Attack, +1 CC Defence",abil:"Consolidation, Bleed (CC)",quirk:"Furious: Will always charge a foe for the better CC bonus when possible.",dominated:"Host charges every Activation, pursuing nearest foe if already in CC."},
+  {n:"Hepu",title:"Charioteer",acc:12,accSt:"Speed",dom:8,domSt:"Finesse",bonus:"+1 Speed, +1 Finesse, +1 Ranged Attack",abil:"Retreat, Opportunity Fire, Nimble",quirk:"Charmer: Will not willingly attack female characters who haven't attacked a companion.",dominated:"Will not attack any female character."},
+  {n:"Iufaa",title:"Hunting Dog",acc:11,accSt:"Speed",dom:7,domSt:"Finesse",bonus:"+1 Speed, +1 CC Attack",abil:"Bring 'em Down, Piercing (CC), Consolidation",quirk:"Hunter: Must take at least one Move Action towards nearest foe each Activation.",dominated:"Follows nearest foe every Activation; all moves bring it towards prey."},
+  {n:"Raneb",title:"Executioner",acc:13,accSt:"Strength",dom:10,domSt:"Strength",bonus:"+2 Strength, +1 CC Attack, +1 CC Defence, −2 Finesse",abil:"Bleed (CC), Determined, Murderous (CC)",quirk:"Merciless: May not disengage from CC once engaged; all foes must fall.",dominated:"May not leave CC until all opponents in it are defeated."},
+  {n:"Khayu",title:"Jailer",acc:12,accSt:"Finesse",dom:9,domSt:"Strength",bonus:"+1 Finesse, +1 CC Defence, +1 Ranged Defence",abil:"Awareness, Stealthy, Retreat",quirk:"Cowardly: May not enter CC if enemies outnumber friendly characters.",dominated:"Host immediately attempts to disengage and move into cover."},
+  {n:"Harkhebi",title:"Scribe",acc:12,accSt:"Finesse",dom:9,domSt:"Finesse",bonus:"−1 Speed, +2 Finesse, +1 Alchemancy",abil:"Shifty, Stern, Rear Defence",quirk:"Disloyal: Host doesn't count towards Outnumbering, Flanking, or aiding another character.",dominated:"Will not count towards or participate in assisted combat."},
+  {n:"Qalhata",title:"Assassin",acc:13,accSt:"Finesse",dom:10,domSt:"Finesse",bonus:"+1 Speed, +1 CC Attack, +1 Ranged Attack",abil:"Backstab, Bleed (CC), Piercing (Ranged)",quirk:"Cunning: Always attacks from rear arc. May not make frontal attack if rear possible.",dominated:"May only engage in CC from rear. May not make Ranged attacks."},
+  {n:"Rekhetre",title:"Courtier",acc:12,accSt:"Finesse",dom:9,domSt:"Finesse",bonus:"+1 Finesse, +2 CC Defence, +1 Ranged Defence, −1 Armour",abil:"Awareness, Bow Out, Hard Target",quirk:"Graceful: No attack against opponent who hasn't attacked an accessible character.",dominated:"Host may not be attacked; they attempt to protect others instead."},
+  {n:"Merasamun",title:"High Priestess of Horus",acc:12,accSt:"Finesse",dom:9,domSt:"Finesse",bonus:"+1 Strength, +1 CC Attack, +1 Armour",abil:"Assault, Determined, Furious Charge",quirk:"Steadfast: Must move down from elevated positions to ground level.",dominated:"Host must engage nearest visible enemy in CC each Activation."},
+  {n:"Nebet",title:"Hunting Falcon",acc:11,accSt:"Speed",dom:8,domSt:"Speed",bonus:"+2 Speed, +1 Finesse, −1 Strength",abil:"Passing Strike, Flit, Swift Step",quirk:"Swift Predator: Will attack the opponent offering least opposition first.",dominated:"Uses all Move Actions to flee; randomly selects targets for passing attacks only."},
+  {n:"Setau",title:"Swordsman",acc:12,accSt:"Strength",dom:9,domSt:"Strength",bonus:"+1 CC Attack, +1 CC Defence, +1 Armour",abil:"Awareness, Piercing (CC), Razor Sharp (CC)",quirk:"Brave: May not move further from a foe within line of sight once spotted.",dominated:"Host must charge nearest foe; may not break CC except via Determination check."},
+  {n:"Buneb",title:"Archer",acc:12,accSt:"Strength",dom:9,domSt:"Strength",bonus:"+1 Speed, +1 Ranged Attack, +1 Ranged Defence",abil:"Opportunity Fire, Hunter's Instinct, Piercing (Ranged)",quirk:"Cowardly: May not join CC to assist; always maintains range.",dominated:"Host must always end Activation in least-exposed position possible."},
+];
+
+// ── CANOPIC BUILDER ───────────────────────────────────────
+reg('canopic',function(){
+  if(document.getElementById('panel-canopic').innerHTML.trim())return;
+  document.getElementById('panel-canopic').innerHTML=`
+<div class="section-header"><h2 class="section-title">Canopic Jar System</h2><p class="section-subtitle">Ancient spirits of Nubt — Scions of the Sands expansion</p></div>
+<div class="notice tip" style="margin-bottom:1.5rem">
+  🏺 <strong>How it works:</strong> At the start of Activation (not an Action), draw from the Canopic Deck and make the Access check (D20 + listed stat vs Access Difficulty). 
+  <strong>Natural 1</strong> = immediate Dominance attempt. <strong>Natural 20</strong> = exceptional access (half duration penalty, enhanced effects).
+  Track connection duration — penalties increase over turns. A filled red box = Dominated (spirit controls character).
+</div>
+<div class="can-layout">
+  <div>
+    <div class="can-deck" onclick="drawSpirit()">
+      <span class="jar-icon">🏺</span>
+      <div style="font-family:'Cinzel',serif;color:var(--brass-light);font-size:1.05rem;margin-bottom:.4rem">Canopic Deck</div>
+      <div id="can-count" style="font-family:'Josefin Sans',sans-serif;font-size:.72rem;color:var(--parchment-dark);margin-bottom:.9rem">20 spirits — click to draw</div>
+      <button class="draw-btn" onclick="event.stopPropagation();drawSpirit()">Draw Spirit</button>
+      <div style="margin-top:.65rem">
+        <button onclick="event.stopPropagation();resetDeck()" style="background:transparent;border:1px solid rgba(201,168,76,.18);color:var(--brass-dark);font-size:.67rem;padding:.25rem .5rem;border-radius:3px;cursor:pointer;font-family:'Josefin Sans',sans-serif">🔄 Shuffle & Reset</button>
+      </div>
+    </div>
+    <div id="drawn-spirit" style="margin-top:1.35rem"></div>
+  </div>
+  <div>
+    <div class="card">
+      <div class="card-title">📜 All 20 Spirits</div>
+      <div id="spirit-list">
+        ${SPIRITS.map(s=>`<div onclick="showSpiritDetail('${s.n}')" style="display:flex;justify-content:space-between;align-items:center;padding:.42rem .65rem;background:rgba(26,18,8,.5);border:1px solid rgba(201,168,76,.1);border-radius:4px;margin-bottom:.28rem;cursor:pointer;transition:border-color .2s" onmouseover="this.style.borderColor='rgba(201,168,76,.3)'" onmouseout="this.style.borderColor='rgba(201,168,76,.1)'">
+          <div><span style="font-family:'Cinzel',serif;font-size:.82rem;color:var(--brass-light)">${s.n}</span> <span style="font-family:'Josefin Sans',sans-serif;font-size:.62rem;color:var(--brass-dark)">${s.title}</span></div>
+          <span style="font-family:'Josefin Sans',sans-serif;font-size:.67rem;color:var(--parchment-dark)">Acc ${s.acc} (${s.accSt.slice(0,3)})</span>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>
+</div>
+<div id="spirit-detail" style="margin-top:1.35rem"></div>`;
+  // Init deck
+  window._canDeck=[...SPIRITS];shuffle(window._canDeck);
+  window._drawn=null;window._domLevel=0;
+});
+
+function drawSpirit(){
+  if(!window._canDeck)return;
+  if(window._canDeck.length===0){window._canDeck=[...SPIRITS];shuffle(window._canDeck);}
+  window._drawn=window._canDeck.pop();window._domLevel=0;
+  document.getElementById('can-count').textContent=window._canDeck.length+' spirits remaining';
+  renderDrawn();
+}
+
+function renderDrawn(){
+  const s=window._drawn;if(!s)return;
+  const d=window._domLevel||0;
+  const penalties=['±0','−2','−4','−6'];
+  document.getElementById('drawn-spirit').innerHTML=`<div class="spirit-card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.75rem">
+      <div><div class="sp-name">${s.n}</div><div class="sp-title">${s.title}</div></div>
+      <div style="text-align:right;font-family:'Josefin Sans',sans-serif;font-size:.67rem;color:var(--parchment-dark)">
+        Access <strong style="color:var(--brass-light)">${s.acc}</strong> (${s.accSt.slice(0,3)})<br>
+        Dom <strong style="color:var(--rust-light)">${s.dom}</strong> (${s.domSt.slice(0,3)})
+      </div>
+    </div>
+    <div class="sp-row"><span style="color:var(--brass-dark)">Bonuses</span><span>${s.bonus}</span></div>
+    <div class="sp-row"><span style="color:var(--brass-dark)">Abilities</span><span style="max-width:180px;text-align:right">${s.abil}</span></div>
+    <div style="margin:.55rem 0;padding:.42rem .6rem;background:rgba(201,168,76,.05);border-radius:3px;font-size:.76rem;color:var(--parchment-dark);font-style:italic"><strong style="color:var(--brass-dark)">Quirk:</strong> ${s.quirk}</div>
+    <div class="dom-track">
+      <div class="dom-lbl">Dominance Track — ${d}/5 turns (current penalty: ${penalties[Math.min(d,3)]})</div>
+      <div class="dom-pips">${Array(5).fill(0).map((_,i)=>`<div class="dom-pip${i===4?' danger':''}${i<d?' filled':''}" onclick="setDom(${i+1})"></div>`).join('')}</div>
+      <div style="margin-top:.65rem;display:flex;gap:.45rem;flex-wrap:wrap">
+        <button onclick="setDom(${Math.min(d+1,5)})" style="background:rgba(204,74,74,.1);border:1px solid rgba(204,74,74,.28);color:var(--rust-light);font-family:'Josefin Sans',sans-serif;font-size:.67rem;padding:.28rem .55rem;border-radius:3px;cursor:pointer">+1 Turn (Dom Risk)</button>
+        <button onclick="disconnectJar()" style="background:transparent;border:1px solid rgba(201,168,76,.18);color:var(--brass-dark);font-family:'Josefin Sans',sans-serif;font-size:.67rem;padding:.28rem .55rem;border-radius:3px;cursor:pointer">Disconnect</button>
+      </div>
+      ${d>=5?`<div style="margin-top:.5rem;padding:.45rem;background:rgba(204,74,74,.1);border:1px solid rgba(204,74,74,.3);border-radius:4px;font-family:'Josefin Sans',sans-serif;font-size:.72rem;color:var(--rust-light)"><strong>⚠ DOMINATED!</strong> ${s.dominated}</div>`:''}
+    </div>
+  </div>`;
+}
+function setDom(v){window._domLevel=Math.min(v,5);renderDrawn();}
+function disconnectJar(){
+  if(window._drawn){window._canDeck.push(window._drawn);shuffle(window._canDeck);}
+  window._drawn=null;window._domLevel=0;
+  document.getElementById('can-count').textContent=window._canDeck.length+' spirits remaining';
+  document.getElementById('drawn-spirit').innerHTML='<div class="notice">🏺 Spirit returned and deck shuffled.</div>';
+}
+function resetDeck(){
+  window._canDeck=[...SPIRITS];shuffle(window._canDeck);window._drawn=null;window._domLevel=0;
+  document.getElementById('can-count').textContent='20 spirits — click to draw';
+  document.getElementById('drawn-spirit').innerHTML='';
+}
+function showSpiritDetail(name){
+  const s=SPIRITS.find(x=>x.n===name);if(!s)return;
+  document.getElementById('spirit-detail').innerHTML=`<div class="card">
+    <div class="card-title">🏺 ${s.n} — ${s.title}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.9rem;font-size:.82rem;margin-bottom:.75rem">
+      <div><div style="font-family:'Josefin Sans',sans-serif;font-size:.65rem;color:var(--brass-dark);margin-bottom:.2rem">Access Check</div>Difficulty <strong style="color:var(--brass-light)">${s.acc}</strong> · Stat: <strong style="color:var(--brass-light)">${s.accSt}</strong></div>
+      <div><div style="font-family:'Josefin Sans',sans-serif;font-size:.65rem;color:var(--brass-dark);margin-bottom:.2rem">Dominance</div>Difficulty <strong style="color:var(--rust-light)">${s.dom}</strong> · Stat: <strong style="color:var(--rust-light)">${s.domSt}</strong></div>
+      <div><div style="font-family:'Josefin Sans',sans-serif;font-size:.65rem;color:var(--brass-dark);margin-bottom:.2rem">Characteristic Bonuses</div>${s.bonus}</div>
+      <div><div style="font-family:'Josefin Sans',sans-serif;font-size:.65rem;color:var(--brass-dark);margin-bottom:.2rem">Granted Abilities</div>${s.abil}</div>
+    </div>
+    <div style="font-size:.8rem;margin-bottom:.5rem"><strong style="color:var(--brass-dark)">Personality Quirk:</strong> <em>${s.quirk}</em></div>
+    <div style="font-size:.8rem;color:var(--rust-light)"><strong>When Dominated:</strong> <em>${s.dominated}</em></div>
+  </div>`;
+}
+
+// ── MISSIONS ──────────────────────────────────────────────
+const DEPLOYS=["Opposite Corners — both deploy in opposite corners (12\" zones)","Surrounded — one company in centre, other surrounds in outer ring","Territory Borders — both along opposite long table edges in 6\" strips","Pitched Battle — equal halves, most balanced deployment","Toe to Toe — both within 12\" of centre; immediate fighting","Pushing Out — one in centre, other surrounding; breakout scenario","Ambush — ambushers hidden in terrain, victims in the open","Incursion — attackers on short edge, defenders in far half","Base Assault — defenders fortified; attackers approaching","Reinforcements — start with half company; rest arrive each turn"];
+const OBJECTIVES=[
+  {n:"Assassinate",vp:4,d:"Kill the enemy leader. 4 VP for taking them Out of Action."},
+  {n:"No Mercy",vp:"1/OOA",d:"Score 1 VP for each enemy character taken Out of Action."},
+  {n:"Territorial Dispute",vp:"2/zone",d:"Control 3 marked terrain zones. 2 VP per zone at game end."},
+  {n:"Kill or be Killed",vp:"2/OOA",d:"Full points for eliminating all opposition. 2 VP per OOA."},
+  {n:"The Boxes",vp:"3/box",d:"Collect 3 loot markers. 3 VP each if held at game end."},
+  {n:"Streetsweeper",vp:"2/zone",d:"Move at least one character through each deployment zone. 2 VP each."},
+  {n:"Vengeance",vp:5,d:"A specific enemy character must be killed. 5 VP for success."},
+  {n:"Take & Hold",vp:4,d:"Hold the central objective marker at game end. 4 VP."},
+  {n:"Passing Through",vp:3,d:"Get a designated character off the opponent's table edge."},
+  {n:"Rumble",vp:"1/round",d:"Win the most Close Combat rounds. 1 VP per round won."},
+  {n:"Engine Tendrils",vp:"2/node",d:"Activate 3 Engine Node points. 2 VP each."},
+  {n:"Search & Destroy",vp:"2/item",d:"Destroy 3 specified items or terrain features. 2 VP each."},
+  {n:"Engine's Presence",vp:"1/turn",d:"Keep a character near the central Node. 1 VP each turn."},
+  {n:"Scouting Mission",vp:"1/pt",d:"Move to 5 marked map points. 1 VP each."},
+  {n:"VIP",vp:5,d:"Escort a designated friendly character to safety."},
+  {n:"Raiding Party",vp:"2/loc",d:"Raid 3 specific locations and escape. 2 VP each."},
+  {n:"Defence",vp:4,d:"Defend your objective for a set number of turns."},
+  {n:"Carriage of Justice",vp:4,d:"Capture and hold an enemy prisoner for 3 turns."},
+  {n:"Capture",vp:3,d:"Grab any enemy character and hold them until game end."},
+  {n:"Blood on the Streets",vp:"2/OOA",d:"Mutual bloodbath. 2 VP for every OOA — yours or theirs."},
+];
+const FEATURES=["Rough Ground (Difficult Terrain area)","Guy's Gunpowder (D8+6 Blast if hit — explosive!)","Errant Essences (free Essence pickup)","Sewer Slime (random hazard creature spawns)","Sinkholes (Diff 12 Finesse or fall 1\")","Twisted Trees (dense — Difficult Terrain + blocks LOS)","Leaking Gas Lamps (Burning hazard at Activation start)","Clockwork Construct (neutral automaton, attacks nearest)","Unstable Scaffold (collapses if 3+ characters on it)","Alchemantic Anomaly (Backfire chance within 4\")","Market Stalls (Cover + can be looted for Equipment)","Engine Node Fragment (+1 Essence per Maintenance in 3\")","Fog Bank (Ranged attacks beyond 6\" suffer −4)","The Gibbet (drop on enemies with Diff 10 Finesse)","Gas Main (Diff 14 to break; 6\" Blast Burning if hit)"];
+const TAROT=["Take 3 enemies Out of Action","Wound the enemy leader","Hold central terrain at game end","Have 3 characters in enemy half at game end","Take more OOA than you lose","Score a Critical Hit to take someone OOA","Use Alchemancy to take someone OOA","Survive with a character at 3 Life or less","Win a CC round against a more expensive character","Take a character OOA in the first 2 turns","Have your leader survive the entire game","Have 4+ characters survive","Score 8+ VP from secondary sources","Disengage from CC and then take that enemy OOA"];
+
+reg('missions',function(){
+  if(document.getElementById('panel-missions').innerHTML.trim())return;
+  document.getElementById('panel-missions').innerHTML=`
+<div class="section-header"><h2 class="section-title">Mission Generator</h2><p class="section-subtitle">Random deployments, objectives & terrain features</p></div>
+<button class="gen-btn" onclick="genMission()">⚙ Generate Mission</button>
+<div class="mission-box" id="mission-result"><div style="text-align:center;padding:3rem 0;color:var(--brass-dark);font-family:'IM Fell English',serif;font-style:italic;font-size:1rem">Click Generate Mission to create a random encounter</div></div>
+<div class="grid-2">
+  <div class="card"><div class="card-title">🗺 Deployments (D10)</div>
+    ${DEPLOYS.map((d,i)=>`<div style="padding:.38rem 0;border-bottom:1px solid rgba(201,168,76,.07);font-size:.79rem"><span style="font-family:'Cinzel',serif;color:var(--brass-light)">${i+1}. </span>${d}</div>`).join('')}
+  </div>
+  <div class="card"><div class="card-title">🎯 Objectives (D20)</div>
+    ${OBJECTIVES.map((o,i)=>`<div style="padding:.38rem 0;border-bottom:1px solid rgba(201,168,76,.07);font-size:.79rem;display:flex;justify-content:space-between">
+      <div><span style="font-family:'Cinzel',serif;color:var(--brass-light)">${i+1}. ${o.n}</span> <div style="font-size:.72rem;color:var(--parchment-dark);font-style:italic">${o.d}</div></div>
+      <span style="font-family:'Cinzel Decorative',serif;color:var(--green);font-size:.85rem;margin-left:.5rem;white-space:nowrap">${o.vp}VP</span>
+    </div>`).join('')}
+  </div>
+</div>`;
+});
+function genMission(){
+  const dep=DEPLOYS[Math.floor(Math.random()*10)];
+  const obj=OBJECTIVES[Math.floor(Math.random()*20)];
+  const nf=Math.floor(Math.random()*3)+1;
+  const feats=shuffle([...FEATURES]).slice(0,nf);
+  const t1=TAROT[Math.floor(Math.random()*TAROT.length)];
+  const t2=TAROT.filter(t=>t!==t1)[Math.floor(Math.random()*(TAROT.length-1))];
+  document.getElementById('mission-result').innerHTML=`
+    <div class="m-head">Mission Generated</div>
+    <div class="m-name">${obj.n}</div>
+    <div style="font-size:.83rem;color:var(--parchment-dark);font-style:italic">${obj.d}</div>
+    <div class="m-detail-grid">
+      <div class="m-detail"><span class="m-dlbl">🗺 Deployment</span><div class="m-dval">${dep.split(' — ')[0]}</div><div style="font-size:.7rem;color:var(--parchment-dark);font-style:italic;margin-top:.2rem">${dep.split(' — ')[1]||''}</div></div>
+      <div class="m-detail"><span class="m-dlbl">🎯 Primary VP</span><div class="m-dval" style="color:var(--green);font-family:'Cinzel Decorative',serif;font-size:1.4rem">${obj.vp}</div></div>
+      <div class="m-detail"><span class="m-dlbl">🌿 Features (${nf})</span>${feats.map(f=>`<div style="font-size:.72rem;color:var(--parchment-dark);margin-top:.18rem">• ${f}</div>`).join('')}</div>
+    </div>
+    <div style="margin-top:1rem">
+      <div style="font-family:'Josefin Sans',sans-serif;font-size:.67rem;letter-spacing:.1em;color:var(--brass-dark);text-transform:uppercase;margin-bottom:.4rem">🃏 Tarot of Taxing Tasks (Secret Objectives)</div>
+      <div class="m-obj">Player A: <strong style="color:var(--brass-light)">${t1}</strong></div>
+      <div class="m-obj">Player B: <strong style="color:var(--brass-light)">${t2}</strong></div>
+    </div>
+    <div style="margin-top:.9rem;padding-top:.9rem;border-top:1px solid rgba(201,168,76,.13);font-family:'Josefin Sans',sans-serif;font-size:.75rem;color:var(--parchment-dark)">
+      <strong style="color:var(--brass-dark)">Always active:</strong> Wound enemy = 1VP · OOA enemy = 2VP
+    </div>`;
+}
+
+// ── CAMPAIGN ──────────────────────────────────────────────
+const CAMPAIGN=[
+  {num:1,act:"I",name:"First Fetching",sub:"Dickensians steal the cache",desc:"Dickensians raid a Servants cache of Alchemantic weapons.",obj:"Retrieve 3 loot markers",spec:"Servants may set 3 trap markers before the game."},
+  {num:2,act:"I",name:"Transport",sub:"Moving the Goods",desc:"The stolen cache must be escorted across the table. Servants intercept.",obj:"Escort carrier off the far edge",spec:"Carrier's Speed is halved."},
+  {num:3,act:"I",name:"Transfer",sub:"The Drop",desc:"Final delivery to the Dickensian stronghold. All-out battle.",obj:"Hold central zone for 3 consecutive turns",spec:"Winner controls cache bonus in Mission 10."},
+  {num:4,act:"II",name:"Essence of Vengeance",sub:"Servants Respond",desc:"Servants locate and assault the Dickensian Essence stash.",obj:"Destroy 3 Essence storage points",spec:"Dickensians may deploy 2 extra Urkin."},
+  {num:5,act:"II",name:"Build Up",sub:"Preparing for War",desc:"A skirmish to secure resources before the decisive blow.",obj:"Score most VP (OOA + objectives)",spec:"Winner gains +10 points in Mission 6."},
+  {num:6,act:"II",name:"Explosive Violence",sub:"The Burning",desc:"Full assault on the Essence supply. No mercy.",obj:"Destroy all 5 Essence caches",spec:"Winner controls Essences bonus in Mission 10."},
+  {num:7,act:"III",name:"Seize Alchemancer",sub:"The Kidnapping",desc:"Capture the opposing Alchemancer.",obj:"Capture enemy Alchemancer",spec:"Captured character cannot use Alchemancy while held."},
+  {num:8,act:"III",name:"Rescue Mission",sub:"Breaking Free",desc:"One side holds the Alchemancer; other must get them out.",obj:"Extract Alchemancer off your table edge",spec:"Captive starts tied — first Action must free them."},
+  {num:9,act:"III",name:"Escape",sub:"The Flight",desc:"The rescued Alchemancer flees while enemies hunt them.",obj:"Get Alchemancer off opponent's edge",spec:"Winner gains Alchemancer bonus in Mission 10."},
+  {num:10,act:"★",name:"Battle Royale",sub:"The Engine Decides",desc:"Final reckoning. Sub-campaign winners gain major bonuses. Full 200pt companies.",obj:"Eliminate enemy company (or most VP at turn 8)",spec:"Cache winner: +1 all damage. Essence winner: +2 Essences. Alchemancer winner: full-power Alchemancer."},
+];
+
+reg('campaign',function(){
+  if(document.getElementById('panel-campaign').innerHTML.trim())return;
+  window._scores={a:0,b:0};window._done=new Set();
+  const acts={};CAMPAIGN.forEach(m=>{if(!acts[m.act])acts[m.act]=[];acts[m.act].push(m);});
+  const actHtml=Object.entries(acts).map(([act,ms])=>`
+    <div class="camp-act">
+      <div class="act-head">
+        <span class="act-num">${act}</span>
+        <div><div class="act-title">${act==='★'?'Final Act':'Act '+act} — ${act==='I'?'The Fetch':act==='II'?'Vengeance':act==='III'?'The Alchemancer':'The Reckoning'}</div>
+        <div class="act-sub">${ms[0].sub}</div></div>
+      </div>
+      <div class="camp-missions" style="grid-template-columns:${ms.length===1?'1fr':'repeat(3,1fr)'}">
+        ${ms.map(m=>`<div class="m-cell" id="mc-${m.num}" onclick="toggleMission(${m.num})">
+          <span class="m-num">Mission ${m.num}</span>
+          <div class="m-title">${m.name}</div>
+          <div class="m-desc">${m.desc}</div>
+          <div style="margin-top:.38rem;font-family:'Josefin Sans',sans-serif;font-size:.6rem;color:var(--brass-dark)">🎯 ${m.obj}</div>
+          <div style="margin-top:.22rem;font-family:'Josefin Sans',sans-serif;font-size:.6rem;color:var(--blue)">⭐ ${m.spec}</div>
+        </div>`).join('')}
+      </div>
+    </div>`).join('');
+  document.getElementById('panel-campaign').innerHTML=`
+<div class="section-header"><h2 class="section-title">Campaign</h2><p class="section-subtitle">The 10-mission story campaign tracker</p></div>
+<div class="score-row">
+  <div class="score-side"><div class="score-faction">🔴 Company A</div><div class="score-num" id="sc-a">0</div><div class="score-btns"><button class="score-btn" onclick="adj('a',-1)">−</button><button class="score-btn" onclick="adj('a',1)">+</button></div></div>
+  <div class="score-vs">VS</div>
+  <div class="score-side"><div class="score-faction">🔵 Company B</div><div class="score-num" id="sc-b">0</div><div class="score-btns"><button class="score-btn" onclick="adj('b',-1)">−</button><button class="score-btn" onclick="adj('b',1)">+</button></div></div>
+</div>
+${actHtml}`;
+});
+function toggleMission(n){
+  const el=document.getElementById('mc-'+n);
+  if(window._done.has(n)){window._done.delete(n);el.classList.remove('done');}
+  else{window._done.add(n);el.classList.add('done');}
+}
+function adj(s,d){window._scores[s]=Math.max(0,(window._scores[s]||0)+d);document.getElementById('sc-'+s).textContent=window._scores[s];}
+
+// ── DICE ──────────────────────────────────────────────────
+reg('dice',function(){
+  if(document.getElementById('panel-dice').innerHTML.trim())return;
+  document.getElementById('panel-dice').innerHTML=`
+<div class="section-header"><h2 class="section-title">Dice Roller</h2><p class="section-subtitle">D20 checks, opposed rolls & damage calculator</p></div>
+<div class="dice-section">
+<div class="dice-main">
+  <div class="dice-lbl">Result</div>
+  <span class="dice-num" id="dn">—</span>
+  <div id="dspec"></div>
+  <div class="dice-btns">
+    <button class="d-btn primary" onclick="rollD(20)">Roll D20</button>
+    <button class="d-btn" onclick="rollD(4)">D4</button>
+    <button class="d-btn" onclick="rollD(6)">D6</button>
+    <button class="d-btn" onclick="rollD(8)">D8</button>
+    <button class="d-btn" onclick="rollD(10)">D10</button>
+    <button class="d-btn" onclick="rollD(12)">D12</button>
+  </div>
+</div>
+<div class="card" style="margin-bottom:1.35rem">
+  <div class="card-title">⚔ Opposed Roll</div>
+  <div class="opp-grid">
+    <div class="opp-side"><h4>Attacker</h4><span class="opp-val" id="oa">—</span>
+      <div style="font-family:'Josefin Sans',sans-serif;font-size:.67rem;color:var(--brass-dark);margin:.3rem 0">Modifier</div>
+      <input class="mod-input" id="ma" type="number" value="0" min="-10" max="20">
+      <button class="d-btn" onclick="rollOpp('a')" style="display:block;margin:.45rem auto;width:100%;font-size:.78rem;padding:.45rem">Roll</button>
+    </div>
+    <div class="vs-div">VS</div>
+    <div class="opp-side"><h4>Defender</h4><span class="opp-val" id="ob">—</span>
+      <div style="font-family:'Josefin Sans',sans-serif;font-size:.67rem;color:var(--brass-dark);margin:.3rem 0">Modifier</div>
+      <input class="mod-input" id="mb" type="number" value="0" min="-10" max="20">
+      <button class="d-btn" onclick="rollOpp('b')" style="display:block;margin:.45rem auto;width:100%;font-size:.78rem;padding:.45rem">Roll</button>
+    </div>
+  </div>
+  <div id="opp-res" style="text-align:center;padding:.65rem;margin-top:.4rem;font-family:'Cinzel',serif;font-size:.95rem"></div>
+  <button class="d-btn primary" onclick="rollBoth()" style="display:block;margin:.9rem auto;width:180px">Roll Both ⚔</button>
+</div>
+<div class="card">
+  <div class="card-title">💥 Damage Calculator</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.9rem;align-items:end;margin-bottom:.9rem">
+    <div><div style="font-family:'Josefin Sans',sans-serif;font-size:.67rem;color:var(--brass-dark);margin-bottom:.28rem;letter-spacing:.08em;text-transform:uppercase">Dice</div>
+      <select id="dd" style="background:rgba(26,18,8,.8);border:1px solid rgba(201,168,76,.28);color:var(--brass-light);font-family:'Josefin Sans',sans-serif;padding:.38rem;border-radius:4px;width:100%">
+        <option>D4</option><option>D6</option><option selected>D8</option><option>D10</option><option>D12</option>
+      </select></div>
+    <div><div style="font-family:'Josefin Sans',sans-serif;font-size:.67rem;color:var(--brass-dark);margin-bottom:.28rem;letter-spacing:.08em;text-transform:uppercase">+Modifier</div>
+      <input class="mod-input" id="dm" type="number" value="3" style="width:100%;display:block"></div>
+    <div><div style="font-family:'Josefin Sans',sans-serif;font-size:.67rem;color:var(--brass-dark);margin-bottom:.28rem;letter-spacing:.08em;text-transform:uppercase">Target Armour</div>
+      <input class="mod-input" id="da" type="number" value="6" style="width:100%;display:block"></div>
+  </div>
+  <div style="display:flex;gap:1rem;margin-bottom:.9rem;flex-wrap:wrap">
+    <label style="display:flex;align-items:center;gap:.38rem;font-family:'Josefin Sans',sans-serif;font-size:.72rem;color:var(--parchment-dark);cursor:pointer"><input type="checkbox" id="dc" style="accent-color:var(--brass)"> Critical Hit (halve Armour)</label>
+    <label style="display:flex;align-items:center;gap:.38rem;font-family:'Josefin Sans',sans-serif;font-size:.72rem;color:var(--parchment-dark);cursor:pointer"><input type="checkbox" id="db" style="accent-color:var(--brass)"> Burning/Penetrating (ignore Armour)</label>
+  </div>
+  <button class="d-btn primary" onclick="rollDmg()" style="display:block;margin:0 auto">Roll Damage</button>
+  <div id="dmg-res" style="text-align:center;margin-top:.9rem;font-family:'Cinzel Decorative',serif;font-size:2.3rem;color:var(--brass-light)"></div>
+  <div id="dmg-det" style="text-align:center;font-family:'Josefin Sans',sans-serif;font-size:.77rem;color:var(--parchment-dark);margin-top:.2rem"></div>
+</div>
+</div>`;
+});
+
+function rollD(sides){
+  const r=Math.floor(Math.random()*sides)+1;
+  const el=document.getElementById('dn');
+  el.classList.remove('rolling');void el.offsetWidth;el.classList.add('rolling');
+  el.textContent=r;
+  const sp=document.getElementById('dspec');
+  if(sides===20&&r===20)sp.innerHTML='<div class="spec-result spec-crit">✨ Critical Hit — Natural 20!</div>';
+  else if(sides===20&&r===1)sp.innerHTML='<div class="spec-result spec-fumble">💀 Fumble — Natural 1!</div>';
+  else sp.innerHTML=`<div style="font-family:'Josefin Sans',sans-serif;font-size:.72rem;color:var(--brass-dark);margin-top:.35rem">D${sides}</div>`;
+  return r;
+}
+
+window._oppVals={a:null,b:null};
+function rollOpp(side){
+  const mod=parseInt(document.getElementById('m'+side).value)||0;
+  const raw=Math.floor(Math.random()*20)+1;
+  const total=raw+mod;
+  window._oppVals[side]={raw,mod,total};
+  document.getElementById('o'+side).textContent=total;
+  updateOppResult();
+}
+function rollBoth(){rollOpp('a');rollOpp('b');}
+function updateOppResult(){
+  const {a,b}=window._oppVals;
+  if(!a||!b)return;
+  let msg='',col='';
+  if(a.total>b.total){msg=`Attacker wins! (${a.total} vs ${b.total})`;col='var(--green)';}
+  else if(b.total>a.total){msg=`Defender wins! (${b.total} vs ${a.total})`;col='var(--red)';}
+  else{msg=`Tie! (${a.total} each) — Favour holder wins`;col='var(--brass-light)';}
+  document.getElementById('opp-res').innerHTML=`<span style="color:${col}">${msg}</span>`;
+}
+
+function rollDmg(){
+  const dice=document.getElementById('dd').value;
+  const mod=parseInt(document.getElementById('dm').value)||0;
+  const arm=parseInt(document.getElementById('da').value)||0;
+  const crit=document.getElementById('dc').checked;
+  const burn=document.getElementById('db').checked;
+  const sides=parseInt(dice.replace('D',''));
+  const raw=Math.floor(Math.random()*sides)+1;
+  const total=raw+mod;
+  let effArm=burn?0:crit?Math.floor(arm/2):arm;
+  const dmg=Math.max(0,total-effArm);
+  document.getElementById('dmg-res').textContent=dmg+' damage';
+  let det=`D${sides} rolled ${raw} + ${mod} modifier = ${total}`;
+  if(burn)det+=' · Armour ignored (Burning)';
+  else if(crit)det+=` · Critical: Armour halved (${arm}→${effArm})`;
+  else det+=` − ${arm} Armour`;
+  document.getElementById('dmg-det').textContent=det;
+}
+
+// ── LORE ──────────────────────────────────────────────────
+reg('lore',function(){
+  if(document.getElementById('panel-lore').innerHTML.trim())return;
+  const lores={
+    engine:`<div class="lore-text">
+      <p>At the heart of Twisted lies <strong style="color:var(--brass-light)">The Engine</strong> — a vast, unknowable machine of impossible complexity whose purpose no one fully understands. Buried deep beneath Victorian London, it thrums with a power that bleeds into the world above, warping the natural and the mechanical alike.</p>
+      <div class="lore-quote">"The Engine does not care for loyalty, for faith, or for righteousness. It simply is. And those who draw close to it are changed forever."</div>
+      <p>The Engine's influence manifests as <strong style="color:var(--brass-light)">Elemental Essences</strong> — raw energies of Fire, Earth, Air, and Water that can be harnessed by those with the gift of Alchemancy. Engine Nodes, scattered across the city and beyond, act as focal points where this power concentrates and can be accessed.</p>
+      <p>The <strong style="color:var(--brass-light)">Eye of The Engine</strong> deck represents the Engine's capricious attention — sometimes helpful, sometimes catastrophic, never predictable. Tempting Fate means drawing the Engine's gaze deliberately, gambling that its attention will bring fortune rather than disaster.</p>
+      <p><strong style="color:var(--brass-light)">Favour of The Engine</strong> is the most coveted resource on the battlefield — the sense that the great machine is momentarily on your side, ready to tip the balance of fate at a critical moment.</p>
+    </div>`,
+    factions:`<div class="lore-text">
+      <p>Three great factions vie for control of The Engine and its secrets, while a fourth watches from the shadows.</p>
+      <p><strong style="color:var(--brass-light)">The Dickensians</strong> are a gang of miscreants, criminals, and transformed monsters united under the brutal leadership of Bill Psyches. They lurk in the dark corners of Victorian London — gin-soaked alleys and fog-choked docklands — and see The Engine as a means to power, wealth, and survival. Their Urkin followers are barely more than feral; their named characters are forces of dangerous unpredictability.</p>
+      <div class="lore-quote">"We ain't 'ere for yer Engine, Guv'nor. We're 'ere for everything it can buy."</div>
+      <p><strong style="color:var(--brass-light)">The Servants of The Engine</strong> are true believers — they see The Engine as something divine, or at least worthy of reverence and protection. Led by the elegant and deadly Nouveau, they are organised, disciplined, and utterly committed. Their Gentlefolk soldiers represent the respectable face of Victorian society, hiding a fanatical devotion beneath brass buttons and polished boots.</p>
+      <p><strong style="color:var(--brass-light)">The Scions of the Sands</strong> emerged from a Victorian archaeological expedition gone catastrophically wrong. Carter's team uncovered a temple of Set in ancient Nubt, Egypt — and activated something that had slept for three thousand years. Now bound to ancient spirits through the Canopic Jar system, the expedition team fights alongside awakened guardians and the terrible Avatar of Set itself.</p>
+      <p><strong style="color:var(--brass-light)">The Guild of Harmony</strong> is a secret organisation that predates all the factions. Founded to prevent any single group from controlling The Engine, they work through three philosophical Creeds — the methodical Ethicists, the scholarly Pragmatists, and the aggressive Anarchists. They sell their services to the other factions while pursuing their own inscrutable agenda.</p>
+    </div>`,
+    egypt:`<div class="lore-text">
+      <p>In the spring of 1895, archaeologist Howard Carter led an expedition into the Egyptian desert. In the ruins of ancient Nubt, they discovered a temple unlike any other — sealed, intact, and radiating a warmth that had nothing to do with the desert sun.</p>
+      <p>Deep within the temple, Carter's team found the chamber of <strong style="color:var(--brass-light)">High Priest Senusret</strong>, who had sealed himself and his most devoted followers inside Canopic Jars — not in death, but in a form of living stasis, connected to an Engine Node of immense power.</p>
+      <div class="lore-quote">"We thought we'd found a tomb. Instead we found a sleeping army, and we woke it."<br>— Agatha Marple, personal diary</div>
+      <p>The activation of the Node called forth the <strong style="color:var(--brass-light)">Avatar of Set</strong> — a terrifying manifestation of the ancient Egyptian deity, channelled through The Engine's power. Rather than flee, the expedition team found themselves drawn into a bond with the Canopic spirits — ancient souls of warriors, priests, and courtiers who offer their powers in exchange for a connection to the living world.</p>
+      <p>The <strong style="color:var(--brass-light)">Canopic Jar System</strong> is unique to the Scions. Each character with the ability carries a jar containing an ancient spirit. When accessed, the spirit overlays its personality and abilities onto the host — but lingering too long risks <strong style="color:var(--rust-light)">Dominance</strong>, where the spirit takes control entirely.</p>
+    </div>`,
+    guild:`<div class="lore-text">
+      <p>The Guild of Harmony has existed in one form or another for as long as The Engine has been known to human scholars — perhaps longer. Founded on a simple principle: that no single faction should control the Nodes, the Guild works in secret to maintain the balance of power.</p>
+      <p>The <strong style="color:var(--brass-light)">Triumvirate</strong> — three anonymous leaders — governs through the Quorum, a council of three Counsellors, one per Creed. Operational and intelligence branches extend beneath them like roots, touching every faction without any of them knowing the full extent of Guild influence.</p>
+      <div class="lore-quote">"We are not your enemies. We are the reason you don't have worse enemies."<br>— The White Rabbit</div>
+      <p>The three <strong style="color:var(--brass-light)">Creeds</strong> reflect different philosophies about how best to protect The Engine. The <strong style="color:var(--brass-light)">Ethicists</strong> believe secrecy is paramount — keep The Engine hidden and its existence unknown to the masses. The <strong style="color:var(--brass-light)">Pragmatists</strong> argue that understanding it fully is the only true protection, and embed themselves with other factions to learn. The <strong style="color:var(--brass-light)">Anarchists</strong> cut through ideology with direct action, protecting Nodes by force when necessary.</p>
+      <p>Guild operatives may be hired by the main factions, but their ultimate loyalty is always to their Creed and its goals — the <strong>Shifting Loyalties</strong> optional rule reflects this, with the possibility that a Guild ally may turn on you at the worst possible moment.</p>
+    </div>`,
+  };
+  const tabs=Object.keys(lores);
+  document.getElementById('panel-lore').innerHTML=`
+<div class="section-header"><h2 class="section-title">World Lore</h2><p class="section-subtitle">The Engine, Victorian London, and the factions</p></div>
+<div class="lore-tabs">
+  ${tabs.map((k,i)=>`<button class="faction-tab${i===0?' active':''}" onclick="showLore('${k}',this)">${{engine:'⚙ The Engine',factions:'🎭 The Factions',egypt:'🏺 Egypt & Scions',guild:'🕵️ Guild of Harmony'}[k]}</button>`).join('')}
+</div>
+${tabs.map((k,i)=>`<div class="lore-panel${i===0?' active':''}" id="lp-${k}">${lores[k]}</div>`).join('')}`;
+});
+function showLore(k,btn){
+  document.querySelectorAll('.lore-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.lore-tabs .faction-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('lp-'+k).classList.add('active');btn.classList.add('active');
+}
+
+function navTo(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  document.querySelector(`.nav-btn[data-panel="${id}"]`).classList.add('active');
+  builders[id]&&builders[id]();
+}
+</script>
+</body>
+</html>
