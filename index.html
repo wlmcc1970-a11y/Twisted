@@ -493,6 +493,8 @@ main{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:1.35rem 
 .char-hero{position:relative;height:120px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-bottom:1px solid rgba(201,168,76,.14);}
 .char-hero svg{transition:transform .4s cubic-bezier(.34,1.56,.64,1),filter .3s;filter:drop-shadow(0 4px 12px rgba(0,0,0,.5));}
 .char-card:hover .char-hero svg{transform:scale(1.07);filter:drop-shadow(0 6px 20px rgba(0,0,0,.6)) drop-shadow(0 0 14px var(--char-glow,rgba(201,168,76,.35)));}
+.char-hero img.char-portrait{transition:transform .4s cubic-bezier(.34,1.56,.64,1),filter .3s;filter:drop-shadow(0 4px 12px rgba(0,0,0,.5));}
+.char-card:hover .char-hero img.char-portrait{transform:scale(1.07);filter:drop-shadow(0 6px 20px rgba(0,0,0,.6)) drop-shadow(0 0 14px var(--char-glow,rgba(201,168,76,.35)));}
 .char-hero-overlay{position:absolute;bottom:0;left:0;right:0;padding:.5rem .9rem;background:linear-gradient(to top,rgba(10,8,15,.95) 55%,transparent);}
 .char-hero-bg{position:absolute;inset:0;background:var(--char-bg,linear-gradient(135deg,rgba(42,32,10,.9),rgba(26,18,8,.95)));transition:opacity .3s;}
 .char-pts-badge{position:absolute;top:.55rem;right:.7rem;font-family:'Cinzel Decorative',serif;font-size:1.15rem;color:var(--brass-light);line-height:1;text-align:right;}
@@ -2572,19 +2574,61 @@ const FACTION_PALETTES={
   default:    {bg1:'rgba(26,18,8,.95)',bg2:'rgba(14,10,4,.98)',rim:'#C9A84C',glow:'rgba(200,168,76,.4)',accent:'#8B6914',sigC:'#E8C97A'},
 };
 
-function getCharCrest(name,role,faction){
+// ── CHARACTER PORTRAITS ───────────────────────────────────
+// Map of character name → portrait filename slug (without extension).
+// Files live at assets/portraits/{size}/{slug}.webp where size is 320 or 512.
+// If a name is missing here, getCharCrest falls back to the SVG sigil crest.
+const PORTRAITS={
+  // dickensians
+  'Bill Psyches':'bill_psyches','Bloodrage Urkin':'bloodrage_urkin','Bullseye':'bullseye',
+  'Dawg & Flea':'dawg_and_flea','Dodger':'dodger','Feygin':'feygin','Nancy':'nancy',
+  'Ollyver':'ollyver','Ratcatcha':'ratcatcha','Rozzer':'rozzer','Shrike':'shrike',
+  'Sowerberry':'sowerberry','Urkin Alchemancer':'urkin_alchemancer','Urkin Dragoon':'urkin_dragoon',
+  'Urkin Shooter':'urkin_shooter','Urkin Slasher':'urkin_slasher',
+  // guild
+  'Albert':'albert','Alice':'alice','Arielle':'arielle','Aykroyd':'aykroyd','Bastion':'bastion',
+  'Count Duviel':'count_duviel','Donna Monvoisin':'donna_monvoisin','Dorothy':'dorothy',
+  'Haystack the Crow Scared':'haystack_the_crow_scared','Lackheart the Rusted':'lackheart_the_rusted',
+  'Long Ma':'long_ma','Maria Poppets':'maria_poppets','Monkey':'monkey','Pascal Du Lyon':'pascal_du_lyon',
+  'Pigsty':'pigsty','Senior Agent':'senior_agent','Tinker Belle':'tinker_belle',
+  'Toto the Dogged':'toto_the_dogged','Tricia Harker':'tricia_harker','Tzandi':'tzandi',
+  'Vinnie':'vinnie','White Rabbit':'white_rabbit','Young Dorothy':'young_dorothy','Zara Craft':'zara_craft',
+  // scions
+  'Agatha':'agatha','Avatar of Set':'avatar_of_set','Carter':'carter','Guardian Dervish':'guardian_dervish',
+  'Guardian Hunter':'guardian_hunter','Hercule':'hercule','Horace De Havilland':'horace_de_havilland',
+  'Hound of Set':'hound_of_set','Indigo Ford':'indigo_ford','Overseer of Hounds':'overseer_of_hounds',
+  'Rotten Mummy':'rotten_mummy','Scarab Mummy':'scarab_mummy',
+  // servants
+  'Blacksmith':'blacksmith','Flower Seller':'flower_seller','Gamekeeper':'gamekeeper',
+  'Gretel & Hansel':'gretel_and_hansel','Highwaywoman':'highwaywoman','Lancer':'lancer',
+  'Launcelot':'launcelot',"M'Dusa":'m_dusa','Miner':'miner','Nightingale':'nightingale',
+  'Nouveau':'nouveau','Sailor':'sailor','Teacher':'teacher','Tesla':'tesla',
+};
+
+function getCharCrest(name,role,faction,size){
   const pal=FACTION_PALETTES[faction]||FACTION_PALETTES.default;
+  const slug=PORTRAITS[name];
+  if(slug){
+    const px=size||320;
+    const url=`assets/portraits/${px}/${slug}.webp`;
+    const safeName=String(name).replace(/"/g,'&quot;');
+    return{
+      bg:`linear-gradient(160deg,${pal.bg1},${pal.bg2})`,
+      svg:`<img class="char-portrait" src="${url}" alt="${safeName}" loading="lazy" decoding="async" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;object-position:center;pointer-events:none">`,
+      isPortrait:true
+    };
+  }
   const sigilFn=SIGILS[name];
   const shieldFn=SHIELDS[faction]||SHIELDS.scions;
-  if(!sigilFn)return{bg:`linear-gradient(160deg,${pal.bg1},${pal.bg2})`,svg:''};
-  return makeCrest(shieldFn,sigilFn,pal);
+  if(!sigilFn)return{bg:`linear-gradient(160deg,${pal.bg1},${pal.bg2})`,svg:'',isPortrait:false};
+  return{...makeCrest(shieldFn,sigilFn,pal),isPortrait:false};
 }
 
 function charCard(c){
   const sk=Object.keys(c.stats);
   const faction=getFaction(c.name);
   const isFav=Store.get('fav_'+c.name,false);
-  const crest=getCharCrest(c.name,c.role,faction);
+  const crest=getCharCrest(c.name,c.role,faction,320);
   return`<div class="char-card" onclick='openChar(${JSON.stringify(c.name).replace(/'/g,"&#39;")})'>
     <div class="char-hero">
       <div class="char-hero-bg" style="--char-bg:${crest.bg}"></div>
@@ -2834,15 +2878,15 @@ function openChar(name){
   const stats=statKeys.filter(k=>c.stats[k]!==undefined);
   const faction=getFaction(c.name);
   const fi=factionIcon(faction);
-  const crest=getCharCrest(c.name,c.role,faction);
+  const crest=getCharCrest(c.name,c.role,faction,512);
   const pal=FACTION_PALETTES[faction]||FACTION_PALETTES.default;
   document.getElementById('m-name').textContent=c.name;
   document.getElementById('m-sub').textContent=`${c.role} · ${c.pts} pts`;
   document.getElementById('m-body').innerHTML=`
     <div style="width:100%;height:150px;border-radius:10px;margin-bottom:1.1rem;position:relative;overflow:hidden;${crest.bg?`background:${crest.bg}`:''};display:flex;align-items:center;justify-content:center">
       <div style="position:absolute;inset:0;background:${crest.bg||'linear-gradient(135deg,rgba(26,18,8,.9),rgba(10,6,20,.95))'}"></div>
-      <div style="position:relative;transform:scale(1.45);filter:drop-shadow(0 6px 18px rgba(0,0,0,.7))">${crest.svg||''}</div>
-      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(8,6,16,.95) 28%,rgba(8,6,16,.2) 60%,transparent)"></div>
+      ${crest.isPortrait?crest.svg:`<div style="position:relative;transform:scale(1.45);filter:drop-shadow(0 6px 18px rgba(0,0,0,.7))">${crest.svg||''}</div>`}
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(8,6,16,.95) 28%,rgba(8,6,16,.2) 60%,transparent);pointer-events:none"></div>
       <div style="position:absolute;bottom:.75rem;left:1.1rem">
         <div style="font-family:'Cinzel',serif;font-size:1.4rem;color:var(--brass-light);text-shadow:0 2px 8px rgba(0,0,0,.8)" translate="no">${c.name}</div>
         <div style="font-family:'Josefin Sans',sans-serif;font-size:.78rem;letter-spacing:.12em;color:${pal.rim||'var(--brass)'};text-transform:uppercase" translate="no">${c.role} · ${faction}</div>
@@ -4776,7 +4820,7 @@ function openCombatTracker(name){
   const charData=Object.values(CHARS).flat().find(x=>x.name===name);
   if(!charData){showToast('Character not found');return;}
   const faction=getFaction(name);
-  const crest=getCharCrest(name,charData.role,faction);
+  const crest=getCharCrest(name,charData.role,faction,512);
   const pal=FACTION_PALETTES[faction]||FACTION_PALETTES.default;
   const maxLife=parseInt(String(charData.stats['LIFE']||0).split('/')[0])||1;
   const woundedAt=Math.ceil(maxLife/2);
@@ -4961,7 +5005,7 @@ function openCombatTracker(name){
     <div class="ct-header">
       <div class="ct-hero" style="background:${crest.bg||'linear-gradient(135deg,rgba(26,18,8,.95),rgba(10,6,20,.98))'}">
         <div style="position:absolute;inset:0"></div>
-        <div style="position:relative;transform:scale(1.3);filter:drop-shadow(0 4px 12px rgba(0,0,0,.6))">${crest.svg||''}</div>
+        ${crest.isPortrait?crest.svg:`<div style="position:relative;transform:scale(1.3);filter:drop-shadow(0 4px 12px rgba(0,0,0,.6))">${crest.svg||''}</div>`}
         <div class="ct-hero-overlay"></div>
         <div class="ct-title-row">
           <div><div class="ct-name">${name}</div><div class="ct-role">${charData.role} · ${faction}</div></div>
@@ -5437,55 +5481,4 @@ function navTo(id){
 // ── SPLASH SCREEN DISMISSAL ──────────────────────────────
 window.addEventListener('load',function(){
   // Restore last active tab on refresh
-  const lastPanel=sessionStorage.getItem('last_panel')||'welcome';
-  if(lastPanel&&lastPanel!=='welcome'){
-    navTo(lastPanel);
-  }
-  setTimeout(function(){
-    const splash=document.getElementById('splash-screen');
-    if(splash){splash.style.opacity='0';setTimeout(()=>splash.remove(),800);}
-  },1200);
-});
-</script>
-<div id="translate-popup" style="opacity:0;pointer-events:none;position:fixed;top:3.8rem;right:.8rem;z-index:99999;background:linear-gradient(135deg,rgba(26,18,8,.98),rgba(26,26,40,.98));border:1px solid var(--brass-dark);border-radius:8px;padding:.75rem 1rem;box-shadow:0 8px 32px rgba(0,0,0,.7),0 0 12px rgba(201,168,76,.1);transition:opacity .2s;max-height:70vh;overflow-y:auto;min-width:180px">
-<div style="font-family:'Josefin Sans',sans-serif;font-size:.7rem;letter-spacing:.08em;color:var(--brass-dark);text-transform:uppercase;margin-bottom:.5rem" translate="no">🌐 Select Language</div>
-<div id="lang-list" translate="no" style="display:flex;flex-direction:column;gap:.25rem"></div>
-</div>
-<style>
-.lang-option{background:transparent;border:1px solid rgba(201,168,76,.15);color:var(--parchment);font-family:'Josefin Sans',sans-serif;font-size:.78rem;padding:.4rem .7rem;border-radius:5px;cursor:pointer;text-align:left;transition:all .2s}
-.lang-option:hover{border-color:var(--brass);background:rgba(201,168,76,.08);color:var(--brass-light)}
-</style>
-<script>
-(function(){
-  const langs=[
-    ['af','Afrikaans'],['sq','Albanian'],['ar','Arabic'],['hy','Armenian'],['az','Azerbaijani'],
-    ['eu','Basque'],['be','Belarusian'],['bn','Bengali'],['bs','Bosnian'],['bg','Bulgarian'],
-    ['ca','Catalan'],['zh-CN','Chinese (Simplified)'],['zh-TW','Chinese (Traditional)'],
-    ['hr','Croatian'],['cs','Czech'],['da','Danish'],['nl','Dutch'],['et','Estonian'],
-    ['fi','Finnish'],['fr','French'],['gl','Galician'],['ka','Georgian'],['de','German'],
-    ['el','Greek'],['gu','Gujarati'],['ht','Haitian Creole'],['he','Hebrew'],['hi','Hindi'],
-    ['hu','Hungarian'],['is','Icelandic'],['id','Indonesian'],['ga','Irish'],['it','Italian'],
-    ['ja','Japanese'],['kn','Kannada'],['ko','Korean'],['lv','Latvian'],['lt','Lithuanian'],
-    ['mk','Macedonian'],['ms','Malay'],['mt','Maltese'],['no','Norwegian'],['fa','Persian'],
-    ['pl','Polish'],['pt','Portuguese'],['ro','Romanian'],['ru','Russian'],['sr','Serbian'],
-    ['sk','Slovak'],['sl','Slovenian'],['es','Spanish'],['sw','Swahili'],['sv','Swedish'],
-    ['ta','Tamil'],['te','Telugu'],['th','Thai'],['tr','Turkish'],['uk','Ukrainian'],
-    ['ur','Urdu'],['vi','Vietnamese'],['cy','Welsh']
-  ];
-  const list=document.getElementById('lang-list');
-  const siteUrl=window.location.hostname?window.location.origin+window.location.pathname:'https://digirunestudios.github.io/Twisted/';
-  langs.forEach(([code,name])=>{
-    const btn=document.createElement('button');
-    btn.className='lang-option';
-    btn.textContent=name;
-    btn.onclick=function(){
-      window.open('https://translate.google.com/translate?sl=en&tl='+code+'&u='+encodeURIComponent(siteUrl),'_blank');
-      var p=document.getElementById('translate-popup');
-      p.style.opacity='0';p.style.pointerEvents='none';
-    };
-    list.appendChild(btn);
-  });
-})();
-</script>
-</body>
-</html>
+  c
