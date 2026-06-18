@@ -1375,6 +1375,7 @@ header{
       </div>
       <div class="header-actions">
         <button onclick="toggleSearch()" title="Search (⌘K)" aria-label="Search" class="header-icon-btn"><svg class="gi" aria-hidden="true"><use href="#gi-search"/></svg></button>
+        <button onclick="openSync()" title="Sync across devices" aria-label="Sync across devices" class="header-icon-btn" id="sync-header-btn"><svg class="gi" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg></button>
         <div class="gm-dropdown-wrap" id="gm-dropdown-wrap">
           <button class="header-icon-btn gm-btn gm-off" id="game-mode-btn" onclick="toggleGmDropdown()" title="Game Mode OFF" aria-label="Game Mode"><svg class="gi" aria-hidden="true"><use href="#gi-gamemode"/></svg></button>
           <div class="gm-dropdown" id="gm-dropdown">
@@ -1414,6 +1415,11 @@ header{
     <button class="mobile-menu-close" onclick="toggleMobileMenu()">✕</button>
   </div>
   <div class="mobile-menu-nav" id="mobile-menu-nav"></div>
+  <div id="sync-section" style="border-top:1px solid rgba(212,184,74,.25);margin-top:.4rem;padding:.85rem 1.1rem;">
+    <div id="sync-status" style="font-family:'Josefin Sans',sans-serif;font-size:.8rem;letter-spacing:.03em;color:var(--brass-light,#e8d8a0);margin-bottom:.55rem;">Cloud sync (off)</div>
+    <button id="sync-btn" type="button" style="display:none;width:100%;min-height:44px;padding:.6rem 1rem;font-family:'Josefin Sans',sans-serif;font-size:.85rem;font-weight:600;letter-spacing:.03em;color:#1a140a;background:linear-gradient(135deg,var(--brass-light,#e8d8a0),var(--brass,#d4b84a));border:none;border-radius:8px;cursor:pointer;">Sign in to sync</button>
+    <div id="sync-note" style="font-size:.7rem;line-height:1.4;color:#9a8f7a;margin-top:.6rem;">Optional. Signing in saves your selections to your Google account via Google Firebase so they sync across your devices. The app works fully without it. <a href="https://www.digirunestudios.com" target="_blank" rel="noopener" style="color:var(--brass,#d4b84a);">Privacy Policy</a>.</div>
+  </div>
 </div>
 
 <!-- SEARCH OVERLAY -->
@@ -2355,6 +2361,7 @@ reg('characters',function(){
 <div class="tut-wrap">
   <button class="tut-btn" id="tut-btn-chars" onclick="toggleTutorial('chars')"><span class="tut-gear">⚙</span> How to Use This Page</button>
   <div class="tut-body" id="tut-body-chars">
+  <div class="card" style="margin-top:.75rem;border-color:rgba(212,184,74,.3);background:rgba(212,184,74,.06);"><p style="margin:0;font-size:.9rem;"><strong style="color:var(--brass-light)">OPTIONAL — Save across devices.</strong> Your selections here are saved on this device automatically. To use them on your other devices too, tap the ☁ icon at the top and sign in with Google. It’s free, completely optional, and you can sign out anytime.</p></div>
   <div class="card" style="margin-top:.75rem;border-color:rgba(212,184,74,.2);background:linear-gradient(135deg,rgba(212,184,74,.06),rgba(30,28,40,.9));text-align:left">
     <div style="padding:.65rem .85rem;font-size:.82rem;line-height:1.65;color:var(--parchment)">
       Every playable Character from all four factions is listed here. Use the <strong style="color:var(--brass-light)">faction tabs</strong> to browse Dickensians, Servants of The Engine, Scions of the Sands, and Guild of Harmony. Tap any card to expand full stats, weapons, abilities, and lore.
@@ -3758,6 +3765,7 @@ reg('missions',function(){
 <div class="tut-wrap">
   <button class="tut-btn" id="tut-btn-missions" onclick="toggleTutorial('missions')"><span class="tut-gear">⚙</span> How to Use This Page</button>
   <div class="tut-body" id="tut-body-missions">
+  <div class="card" style="margin-top:.75rem;border-color:rgba(212,184,74,.3);background:rgba(212,184,74,.06);"><p style="margin:0;font-size:.9rem;"><strong style="color:var(--brass-light)">OPTIONAL — Save across devices.</strong> Your selections here are saved on this device automatically. To use them on your other devices too, tap the ☁ icon at the top and sign in with Google. It’s free, completely optional, and you can sign out anytime.</p></div>
   <div class="card" style="margin-top:.75rem;border-color:rgba(212,184,74,.2);background:linear-gradient(135deg,rgba(212,184,74,.06),rgba(30,28,40,.9));text-align:left">
     <div style="padding:.65rem .85rem;font-size:.82rem;line-height:1.65;color:var(--parchment)">
       Every game of Twisted uses a randomly generated mission. After setting up terrain, players determine their mission by rolling for a <strong style="color:var(--brass-light)">Deployment Type</strong> (D10), a <strong style="color:var(--brass-light)">Primary Objective</strong> (D20), and optionally <strong style="color:var(--brass-light)">Fascinating Features</strong> (D6 for quantity, then D20 each). Each player also draws a secret <strong style="color:var(--brass-light)">Tarot of Taxing Tasks</strong> card for bonus Victory Points.
@@ -4853,6 +4861,7 @@ function renderDelights(filterTier='all',searchVal=''){
 <div class="tut-wrap">
   <button class="tut-btn" id="tut-btn-delights" onclick="toggleTutorial('delights')"><span class="tut-gear">⚙</span> How to Use This Page</button>
   <div class="tut-body" id="tut-body-delights">
+  <div class="card" style="margin-top:.75rem;border-color:rgba(212,184,74,.3);background:rgba(212,184,74,.06);"><p style="margin:0;font-size:.9rem;"><strong style="color:var(--brass-light)">OPTIONAL — Save across devices.</strong> Your selections here are saved on this device automatically. To use them on your other devices too, tap the ☁ icon at the top and sign in with Google. It’s free, completely optional, and you can sign out anytime.</p></div>
   <div class="card" style="margin-top:.75rem;border-color:rgba(212,184,74,.2);text-align:left">
     <div style="padding:.65rem .85rem;font-size:.85rem;line-height:1.55">
       <span style="color:var(--parchment)">When building a Company (200pts), you pick Characters on the \ud83c\udfad Characters tab and manage your full roster on the \ud83d\udccb Company tab. Any leftover points can be spent here on equipment items. Tap <span style="color:#6BCFA8;font-weight:700">+</span> to add a Delight \u2014 its cost counts against your shared 200pt budget. Each Character may hold only one Delight at a time. Items can be swapped between Characters during a game using a Handing Off Action.</span>
@@ -5022,6 +5031,8 @@ function renderBuilder(){
 <div class="tut-wrap">
   <button class="tut-btn" id="tut-btn-company" onclick="toggleTutorial('company')"><span class="tut-gear">⚙</span> How to Use This Page</button>
   <div class="tut-body" id="tut-body-company">
+  <div class="card" style="margin-top:.75rem;border-color:rgba(212,184,74,.3);background:rgba(212,184,74,.06);"><p style="margin:0;font-size:.9rem;"><strong style="color:var(--brass-light)">Save up to 3 companies.</strong> Use the numbered tabs (1 · 2 · 3) at the top of this page to keep up to three separate companies — each with its own name and roster. Tap a number to switch between them; tap “+ New” to start another. The company shown here is your active one.</p></div>
+  <div class="card" style="margin-top:.75rem;border-color:rgba(212,184,74,.3);background:rgba(212,184,74,.06);"><p style="margin:0;font-size:.9rem;"><strong style="color:var(--brass-light)">OPTIONAL — Save across devices.</strong> Your selections here are saved on this device automatically. To use them on your other devices too, tap the ☁ icon at the top and sign in with Google. It’s free, completely optional, and you can sign out anytime.</p></div>
   <div class="card" style="margin-top:.75rem;border-color:rgba(212,184,74,.2);background:linear-gradient(135deg,rgba(212,184,74,.06),rgba(30,28,40,.9));text-align:left">
     <div style="padding:.65rem .85rem;font-size:.82rem;line-height:1.65;color:var(--parchment)">
       This is your Company roster \u2014 the warband you\u2019ll field in a game of \u201cTwisted.\u201d A standard Company uses a <strong>200-point budget</strong> shared between Characters and Delights.
@@ -6343,6 +6354,124 @@ window.addEventListener('load',function(){
     list.appendChild(btn);
   });
 })();
+</script>
+<script>
+/* ── CLOUD SYNC (optional Google sign-in via Firebase) ───────────────────
+   DEVIATION approved by Will 2026-06-18: loads the Firebase SDK from Google's
+   CDN — the one external dependency beyond CDN fonts. The app stays a single
+   HTML file and fully offline for every non-sync feature; sign-in/sync is an
+   online-only enhancement that fails gracefully when Firebase can't load. */
+(function(){
+  var FB="https://www.gstatic.com/firebasejs/10.12.2/";
+  var cfg={apiKey:"AIzaSyBHVQyPjqZhZCdxuVHND-cBZWF6kn9gKYY",authDomain:"twisted-companion.firebaseapp.com",projectId:"twisted-companion",storageBucket:"twisted-companion.firebasestorage.app",messagingSenderId:"1044382205472",appId:"1:1044382205472:web:419bb4b87b2e7c26341e45"};
+  function statusEl(){return document.getElementById('sync-status');}
+  function btnEl(){return document.getElementById('sync-btn');}
+  function setStatus(t){var e=statusEl();if(e)e.textContent=t;}
+  function setBtn(label,show){var b=btnEl();if(!b)return;b.textContent=label;b.style.display=show?'block':'none';}
+  function deviceId(){var d=null;try{d=localStorage.getItem('twisted_sync_device');}catch(e){}if(!d){d='dev_'+Math.random().toString(36).slice(2)+Date.now().toString(36);try{localStorage.setItem('twisted_sync_device',d);}catch(e){}}return d;}
+  function gatherLocal(){var out={};try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf('twisted_')===0&&k!=='twisted_sync_device')out[k]=localStorage.getItem(k);}}catch(e){}return out;}
+  function applyCloud(map){var before=JSON.stringify(gatherLocal());try{Object.keys(map).forEach(function(k){if(k.indexOf('twisted_')===0)localStorage.setItem(k,map[k]);});}catch(e){}return before!==JSON.stringify(gatherLocal());}
+
+  // Header icon + first-run tip make sync discoverable upfront (independent of Firebase load).
+  window.openSync=function(){try{var m=document.getElementById('mobile-menu');if(m&&!m.classList.contains('open'))toggleMobileMenu();var s=document.getElementById('sync-section');if(s&&s.scrollIntoView)s.scrollIntoView({block:'nearest'});}catch(e){}};
+  function showSyncTip(){try{if(localStorage.getItem('twisted_sync_tip_seen'))return;var bar=document.createElement('div');bar.id='sync-tip';bar.style.cssText='position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 10px);z-index:99998;max-width:92%;width:420px;display:flex;align-items:center;gap:.55rem;background:linear-gradient(135deg,#241a0e,#1a140a);border:1px solid var(--brass,#d4b84a);border-radius:10px;padding:.6rem .7rem;box-shadow:0 8px 28px rgba(0,0,0,.45);font-family:\'Josefin Sans\',sans-serif;';bar.innerHTML='<span style="flex:1;font-size:.78rem;line-height:1.35;color:#e8d8a0;">New: sign in to <b>sync your saved selections across devices</b> \u2014 optional, anytime.</span>';var go=document.createElement('button');go.textContent='Set up';go.style.cssText='flex:none;min-height:36px;padding:.35rem .7rem;font-family:inherit;font-size:.78rem;font-weight:600;color:#1a140a;background:var(--brass,#d4b84a);border:none;border-radius:7px;cursor:pointer;';var x=document.createElement('button');x.setAttribute('aria-label','Dismiss');x.textContent='\u2715';x.style.cssText='flex:none;min-width:36px;min-height:36px;background:transparent;border:none;color:#9a8f7a;font-size:1rem;cursor:pointer;';function dismiss(){try{localStorage.setItem('twisted_sync_tip_seen','1');}catch(e){}if(bar.parentNode)bar.parentNode.removeChild(bar);}go.onclick=function(){dismiss();window.openSync();};x.onclick=dismiss;bar.appendChild(go);bar.appendChild(x);document.body.appendChild(bar);}catch(e){}}
+  if(document.readyState!=='loading')showSyncTip();else document.addEventListener('DOMContentLoaded',showSyncTip);
+  Promise.all([import(FB+"firebase-app.js"),import(FB+"firebase-auth.js"),import(FB+"firebase-firestore.js")]).then(function(mods){
+    var appMod=mods[0],authMod=mods[1],fsMod=mods[2];
+    var app=appMod.initializeApp(cfg),auth=authMod.getAuth(app),db=fsMod.getFirestore(app);
+    var provider=new authMod.GoogleAuthProvider();
+    var pushTimer=null,currentUser=null,unsub=null;
+    function docRef(uid){return fsMod.doc(db,'users',uid);}
+    function pushNow(){if(!currentUser)return;fsMod.setDoc(docRef(currentUser.uid),{blob:JSON.stringify(gatherLocal()),updatedAt:Date.now(),device:deviceId()}).catch(function(){});}
+    function schedulePush(){if(!currentUser)return;if(pushTimer)clearTimeout(pushTimer);pushTimer=setTimeout(pushNow,1500);}
+    try{var _set=Store.set.bind(Store),_del=Store.del.bind(Store);Store.set=function(k,v){_set(k,v);schedulePush();};Store.del=function(k){_del(k);schedulePush();};}catch(e){}
+    var b=btnEl();
+    if(b){b.style.display='block';b.onclick=function(){if(currentUser){authMod.signOut(auth);}else{setStatus('Opening Google sign-in…');authMod.signInWithRedirect(auth,provider);}};}
+    authMod.getRedirectResult(auth).catch(function(){});
+    authMod.onAuthStateChanged(auth,function(user){
+      currentUser=user;if(unsub){unsub();unsub=null;}
+      if(user){
+        setStatus('Synced as '+(user.email||user.displayName||'your account'));setBtn('Sign out',true);
+        fsMod.getDoc(docRef(user.uid)).then(function(snap){
+          var data=snap.exists()?snap.data():null;
+          if(!data||!data.blob){pushNow();}
+          else{var changed=false;try{changed=applyCloud(JSON.parse(data.blob));}catch(e){}if(changed){location.reload();return;}}
+          unsub=fsMod.onSnapshot(docRef(user.uid),function(s){if(!s.exists())return;var d=s.data();if(!d||!d.blob)return;if(d.device===deviceId())return;var ch=false;try{ch=applyCloud(JSON.parse(d.blob));}catch(e){}if(ch)location.reload();});
+        }).catch(function(){setStatus('Sync error — will retry next change');});
+      }else{setStatus('Cloud sync (off)');setBtn('Sign in to sync',true);}
+    });
+  }).catch(function(){setStatus('Cloud sync unavailable offline');setBtn('Sign in to sync',false);});
+})();
+
+</script>
+<script>
+/* ── MULTI-COMPANY SLOTS (up to 3) ───────────────────────────────────────
+   A thin layer over the existing single-company keys. The ACTIVE company is
+   always mirrored in roster / roster_name / delights_roster, so every existing
+   builder / Delights / combat-tracker function keeps working unchanged. Slots
+   snapshot the inactive companies. Stored under twisted_* so it syncs for free. */
+(function(){
+  var MAX=3;
+  function getCompanies(){
+    var c=Store.get('companies',null);
+    if(!Array.isArray(c)||!c.length){
+      c=[{name:Store.get('roster_name','My Company'),roster:Store.get('roster',[]),delights:Store.get('delights_roster',[])}];
+      Store.set('companies',c); Store.set('active_company',0);
+    }
+    return c;
+  }
+  function activeIdx(){var i=Store.get('active_company',0);var c=getCompanies();if(typeof i!=='number'||i<0||i>=c.length)i=0;return i;}
+  function snapshotActive(){var c=getCompanies();var i=activeIdx();c[i]={name:Store.get('roster_name','My Company'),roster:Store.get('roster',[]),delights:Store.get('delights_roster',[])};Store.set('companies',c);return c;}
+  function loadSlot(i){var c=getCompanies();var s=c[i]||{name:'My Company',roster:[],delights:[]};Store.set('roster_name',s.name||'My Company');Store.set('roster',Array.isArray(s.roster)?s.roster:[]);Store.set('delights_roster',Array.isArray(s.delights)?s.delights:[]);}
+  function refreshMirrors(){window._roster=Store.get('roster',[]);window._delightsRoster=Store.get('delights_roster',[]);}
+
+  window.companySwitch=function(i){
+    if(i===activeIdx())return;
+    var c=snapshotActive();
+    if(i>=c.length){ if(c.length>=MAX)return; while(c.length<=i){c.push({name:'Company '+(c.length+1),roster:[],delights:[]});} Store.set('companies',c); }
+    Store.set('active_company',i);
+    loadSlot(i); refreshMirrors();
+    if(typeof renderBuilder==='function')renderBuilder();
+  };
+  window.companyAdd=function(){var c=snapshotActive();if(c.length>=MAX)return;var ni=c.length;c.push({name:'Company '+(ni+1),roster:[],delights:[]});Store.set('companies',c);window.companySwitch(ni);};
+
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function pillsHTML(){
+    var c=getCompanies(),act=activeIdx();
+    var h='<div id="company-pills" role="tablist" aria-label="Saved companies" style="display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;margin:.25rem 0 .7rem;">';
+    for(var i=0;i<c.length;i++){
+      var raw=(i===act)?(Store.get('roster_name','My Company')||('Company '+(i+1))):((c[i]&&c[i].name)||('Company '+(i+1)));
+      var nm=esc(String(raw).slice(0,18)); var on=(i===act);
+      h+='<button type="button" role="tab" aria-selected="'+on+'" onclick="companySwitch('+i+')" title="Switch to '+nm+'" '
+        +'style="min-height:34px;padding:.3rem .7rem;border-radius:999px;cursor:pointer;font-family:\'Josefin Sans\',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.02em;'
+        +(on?'color:#1a140a;background:linear-gradient(135deg,var(--brass-light,#e8d8a0),var(--brass,#d4b84a));border:1px solid var(--brass,#d4b84a);'
+            :'color:var(--brass-light,#e8d8a0);background:transparent;border:1px solid rgba(212,184,74,.4);')+'">'
+        +'<span style="opacity:.6;margin-right:.3rem;">'+(i+1)+'</span>'+nm+'</button>';
+    }
+    if(c.length<MAX){
+      h+='<button type="button" onclick="companyAdd()" title="Add a new company" aria-label="Add a new company" '
+        +'style="min-height:34px;padding:.3rem .8rem;border-radius:999px;cursor:pointer;font-family:\'Josefin Sans\',sans-serif;font-size:.78rem;font-weight:600;'
+        +'color:var(--brass,#d4b84a);background:transparent;border:1px dashed rgba(212,184,74,.55);">+ New</button>';
+    }
+    return h+'</div>';
+  }
+  function injectPills(){
+    try{
+      var panel=document.getElementById('panel-company'); if(!panel)return;
+      var old=document.getElementById('company-pills'); if(old&&old.parentNode)old.parentNode.removeChild(old);
+      var wrap=document.createElement('div'); wrap.innerHTML=pillsHTML(); var el=wrap.firstChild;
+      var header=panel.querySelector('.section-header');
+      if(header){ header.parentNode.insertBefore(el, header.nextSibling); }
+      else { panel.insertBefore(el, panel.firstChild); }
+      var nameInput=document.getElementById('roster-name');
+      if(nameInput && !nameInput._compHooked){ nameInput._compHooked=true; nameInput.addEventListener('change',function(){snapshotActive();injectPills();}); }
+    }catch(e){}
+  }
+  if(typeof renderBuilder==='function'){ var _orb=renderBuilder; window.renderBuilder=function(){ var r=_orb.apply(this,arguments); injectPills(); return r; }; }
+  getCompanies();
+  if(document.getElementById('roster-name'))injectPills();
+})();
+
 </script>
 </body>
 </html>

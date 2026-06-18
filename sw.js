@@ -1,9 +1,10 @@
 // Twisted Companion — Service Worker
-// Caches the app shell for offline use and caches Google Fonts so they survive network loss.
+// Caches the app shell for offline use, plus Google Fonts and the Firebase SDK so they survive network loss.
 // Bump CACHE version when deploying significant updates to force a refresh.
 
-const CACHE='twisted-v3';
+const CACHE='twisted-v1000';
 const FONT_CACHE='twisted-fonts-v1';
+const LIB_CACHE='twisted-libs-v1';
 const ASSETS=['./','./index.html'];
 
 self.addEventListener('install',e=>e.waitUntil(
@@ -12,7 +13,7 @@ self.addEventListener('install',e=>e.waitUntil(
 
 self.addEventListener('activate',e=>e.waitUntil(
   caches.keys().then(keys=>Promise.all(
-    keys.filter(k=>k!==CACHE&&k!==FONT_CACHE).map(k=>caches.delete(k))
+    keys.filter(k=>k!==CACHE&&k!==FONT_CACHE&&k!==LIB_CACHE).map(k=>caches.delete(k))
   )).then(()=>self.clients.claim())
 ));
 
@@ -30,6 +31,19 @@ self.addEventListener('fetch',e=>{
         if(res&&res.status===200)c.put(e.request,res.clone());
         return res;
       }).catch(()=>new Response('',{status:200,headers:{'Content-Type':'text/css'}}));
+    })));
+    return;
+  }
+
+  // Firebase SDK (loaded on demand for optional sign-in/sync): cache-first so offline
+  // launches still load the modules; network calls inside them simply fail gracefully offline.
+  if(url.hostname==='www.gstatic.com'&&url.pathname.indexOf('/firebasejs/')!==-1){
+    e.respondWith(caches.open(LIB_CACHE).then(c=>c.match(e.request).then(r=>{
+      if(r)return r;
+      return fetch(e.request).then(res=>{
+        if(res&&res.status===200)c.put(e.request,res.clone());
+        return res;
+      });
     })));
     return;
   }
