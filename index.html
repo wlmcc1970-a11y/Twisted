@@ -6203,11 +6203,9 @@ if('serviceWorker' in navigator){
 // ── PWA INSTALL PROMPT ────────────────────────────────────
 let _deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{
+  // Twisted ships via the app stores only (web/PWA is internal dev). Suppress the
+  // browser's install prompt and keep our custom install buttons hidden. 2026-06-19
   e.preventDefault();_deferredPrompt=e;
-  const btn=document.getElementById('pwa-install-btn');
-  if(btn)btn.style.display='flex';
-  const wb=document.getElementById('welcome-install');
-  if(wb)wb.style.display='block';
 });
 window.addEventListener('appinstalled',()=>{
   const btn=document.getElementById('pwa-install-btn');

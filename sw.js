@@ -2,7 +2,7 @@
 // Caches the app shell for offline use, plus Google Fonts and the Firebase SDK so they survive network loss.
 // Bump CACHE version when deploying significant updates to force a refresh.
 
-const CACHE='twisted-v1004';
+const CACHE='twisted-v1005';
 const FONT_CACHE='twisted-fonts-v1';
 const LIB_CACHE='twisted-libs-v1';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-maskable-512.png','./icons/apple-touch-icon-180.png','./icons/twisted-logo.png'];
