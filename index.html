@@ -6371,6 +6371,11 @@ window.addEventListener('load',function(){
   function deviceId(){var d=null;try{d=localStorage.getItem('twisted_sync_device');}catch(e){}if(!d){d='dev_'+Math.random().toString(36).slice(2)+Date.now().toString(36);try{localStorage.setItem('twisted_sync_device',d);}catch(e){}}return d;}
   function gatherLocal(){var out={};try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf('twisted_')===0&&k!=='twisted_sync_device')out[k]=localStorage.getItem(k);}}catch(e){}return out;}
   function applyCloud(map){var before=JSON.stringify(gatherLocal());try{Object.keys(map).forEach(function(k){if(k.indexOf('twisted_')===0)localStorage.setItem(k,map[k]);});}catch(e){}return before!==JSON.stringify(gatherLocal());}
+  function cloudKeyCount(d){try{return (d&&d.blob)?Object.keys(JSON.parse(d.blob)).length:0;}catch(e){return 0;}}
+  function localHasData(){var m=gatherLocal();try{var r=m['twisted_roster'];if(r&&JSON.parse(r).length)return true;var dl=m['twisted_delights_roster'];if(dl&&JSON.parse(dl).length)return true;var c=m['twisted_companies'];if(c){var a=JSON.parse(c);for(var i=0;i<a.length;i++){var x=a[i]||{};if((x.roster&&x.roster.length)||(x.delights&&x.delights.length))return true;}}}catch(e){}var ig={twisted_sync_tip_seen:1,twisted_ct_version:1,twisted_active_company:1,twisted_companies:1,twisted_roster:1,twisted_delights_roster:1,twisted_sync_device:1};for(var k in m){if(!ig[k])return true;}return false;}
+  function mergeMaps(c,l){var o={},k;for(k in c)o[k]=c[k];for(k in l)o[k]=l[k];return o;}
+  function decideSync(ck,hl){if(ck===0)return hl?'push':'noop';return hl?'merge':'pull';}
+  if(typeof window!=='undefined'){window.__twistedSync={decideSync:decideSync,mergeMaps:mergeMaps};}
 
   // Header icon + first-run tip make sync discoverable upfront (independent of Firebase load).
   window.openSync=function(){try{var m=document.getElementById('mobile-menu');if(m&&!m.classList.contains('open'))toggleMobileMenu();var s=document.getElementById('sync-section');if(s&&s.scrollIntoView)s.scrollIntoView({block:'nearest'});}catch(e){}};
@@ -6382,20 +6387,23 @@ window.addEventListener('load',function(){
     var provider=new authMod.GoogleAuthProvider();
     var pushTimer=null,currentUser=null,unsub=null;
     function docRef(uid){return fsMod.doc(db,'users',uid);}
-    function pushNow(){if(!currentUser)return;fsMod.setDoc(docRef(currentUser.uid),{blob:JSON.stringify(gatherLocal()),updatedAt:Date.now(),device:deviceId()}).catch(function(){});}
+    function pushMap(map){if(!currentUser)return;fsMod.setDoc(docRef(currentUser.uid),{blob:JSON.stringify(map),updatedAt:Date.now(),device:deviceId()}).catch(function(){});}
+    function pushNow(){pushMap(gatherLocal());}
     function schedulePush(){if(!currentUser)return;if(pushTimer)clearTimeout(pushTimer);pushTimer=setTimeout(pushNow,1500);}
     try{var _set=Store.set.bind(Store),_del=Store.del.bind(Store);Store.set=function(k,v){_set(k,v);schedulePush();};Store.del=function(k){_del(k);schedulePush();};}catch(e){}
     var b=btnEl();
-    if(b){b.style.display='block';b.onclick=function(){if(currentUser){authMod.signOut(auth);}else{setStatus('Opening Google sign-in…');authMod.signInWithRedirect(auth,provider);}};}
-    authMod.getRedirectResult(auth).catch(function(){});
+    if(b){b.style.display='block';b.onclick=function(){if(currentUser){authMod.signOut(auth);}else{setStatus('Opening Google sign-in…');authMod.signInWithPopup(auth,provider).catch(function(e){setStatus('Sign-in didn\u2019t complete \u2014 tap the button to try again');});}};}
+    /* popup keeps auth in-window; no redirect result to process */
     authMod.onAuthStateChanged(auth,function(user){
       currentUser=user;if(unsub){unsub();unsub=null;}
       if(user){
         setStatus('Synced as '+(user.email||user.displayName||'your account'));setBtn('Sign out',true);
         fsMod.getDoc(docRef(user.uid)).then(function(snap){
           var data=snap.exists()?snap.data():null;
-          if(!data||!data.blob){pushNow();}
-          else{var changed=false;try{changed=applyCloud(JSON.parse(data.blob));}catch(e){}if(changed){location.reload();return;}}
+          var _d=decideSync(cloudKeyCount(data),localHasData());
+          if(_d==='push'||_d==='noop'){pushNow();}
+          else if(_d==='pull'){var changed=false;try{changed=applyCloud(JSON.parse(data.blob));}catch(e){}if(changed){location.reload();return;}}
+          else{var _cm={};try{_cm=JSON.parse(data.blob);}catch(e){}var _mg=mergeMaps(_cm,gatherLocal());var _ch=applyCloud(_mg);if(JSON.stringify(_mg)!==JSON.stringify(_cm))pushMap(_mg);if(_ch){location.reload();return;}}
           unsub=fsMod.onSnapshot(docRef(user.uid),function(s){if(!s.exists())return;var d=s.data();if(!d||!d.blob)return;if(d.device===deviceId())return;var ch=false;try{ch=applyCloud(JSON.parse(d.blob));}catch(e){}if(ch)location.reload();});
         }).catch(function(){setStatus('Sync error — will retry next change');});
       }else{setStatus('Cloud sync (off)');setBtn('Sign in to sync',true);}
