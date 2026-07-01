@@ -1,8 +1,10 @@
 // Twisted Companion — Service Worker
 // Caches the app shell for offline use, plus Google Fonts and the Firebase SDK so they survive network loss.
-// Bump CACHE version when deploying significant updates to force a refresh.
+// NETWORK-FIRST for app navigations: always fetch the latest code online, fall back to the cached
+// shell only when offline. Static assets/fonts/Firebase SDK stay cache-first for speed + offline.
+// Bump CACHE when deploying updates (keep it in lockstep with the on-screen version stamp).
 
-const CACHE='twisted-v1005';
+const CACHE='twisted-v1006';
 const FONT_CACHE='twisted-fonts-v1';
 const LIB_CACHE='twisted-libs-v1';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-maskable-512.png','./icons/apple-touch-icon-180.png','./icons/twisted-logo.png'];
@@ -22,6 +24,23 @@ self.addEventListener('fetch',e=>{
   if(e.request.method!=='GET')return;
 
   const url=new URL(e.request.url);
+
+  // App navigations (the HTML shell): NETWORK-FIRST so users always get the latest deployed code.
+  // Cache the fresh copy for offline, and fall back to the cached shell when the network is unavailable.
+  const isNav = e.request.mode==='navigate' ||
+                (e.request.headers.get('accept')||'').indexOf('text/html')!==-1;
+  if(isNav){
+    e.respondWith(
+      fetch(e.request).then(res=>{
+        if(res&&res.status===200&&res.type==='basic'){
+          const clone=res.clone();
+          caches.open(CACHE).then(c=>c.put('./index.html',clone));
+        }
+        return res;
+      }).catch(()=>caches.match('./index.html').then(r=>r||caches.match('./')))
+    );
+    return;
+  }
 
   // Google Fonts: cache-first, fall back to empty stylesheet if network fails
   if(url.hostname==='fonts.googleapis.com'||url.hostname==='fonts.gstatic.com'){
@@ -48,7 +67,7 @@ self.addEventListener('fetch',e=>{
     return;
   }
 
-  // Everything else: cache-first, update cache in background on success, fall back to app shell on failure
+  // Everything else (icons/static same-origin assets): cache-first, refresh in background on success
   e.respondWith(
     caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{
       if(res&&res.status===200&&res.type==='basic'){
