@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Twisted</title><meta name="robots" content="noindex"></head>
+<body style="background:#1F2620">
+<script>
+(function(){
+  var DEST='https://twisted.digirunestudios.com/';   // hardcoded — never trust a URL param
+  try{
+    var out={};
+    for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); if(k&&k.indexOf('twisted_')===0){ out[k]=localStorage.getItem(k); } }
+    var enc=encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(out)))));
+    location.replace(DEST+'#twmig='+enc);
+  }catch(e){ location.replace(DEST); }
+})();
+</script>
+</body></html>
