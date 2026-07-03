@@ -2,6 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>
+(function(){
+  try{
+    if(navigator.onLine===false) return;            /* offline: let the cached app load, not a failed redirect */
+    for(var i=0;i<localStorage.length;i++){
+      var k=localStorage.key(i);
+      if(k&&k.indexOf('twisted_')===0){ location.replace('migrate-export.html'); return; }  /* has saves -> push to branded first */
+    }
+    location.replace('https://twisted.digirunestudios.com/');   /* no saves -> straight to branded */
+  }catch(e){ try{ location.replace('https://twisted.digirunestudios.com/'); }catch(_){ } }
+})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>TWISTED — Steampunk Skirmish · The Official Companion App</title>
 <meta name="description" content="The official companion app for Twisted Steampunk Skirmish by Demented Games">
